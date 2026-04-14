@@ -1,9 +1,14 @@
-'use strict';
+"use strict";
 
 const WINNING_COMBOS = [
-  [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-  [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
-  [0, 4, 8], [2, 4, 6],            // diagonals
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8], // rows
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8], // columns
+  [0, 4, 8],
+  [2, 4, 6], // diagonals
 ];
 
 /**
@@ -11,8 +16,8 @@ const WINNING_COMBOS = [
  */
 function createInitialState() {
   return {
-    board:   Array(9).fill(''),
-    current: 'X',
+    board: Array(9).fill(""),
+    current: "X",
     gameOver: false,
   };
 }
@@ -23,7 +28,7 @@ function createInitialState() {
  * @returns {'X'|'O'}
  */
 function getNextPlayer(current) {
-  return current === 'X' ? 'O' : 'X';
+  return current === "X" ? "O" : "X";
 }
 
 /**
@@ -35,7 +40,7 @@ function getNextPlayer(current) {
  */
 function applyMove(board, index, player) {
   if (index < 0 || index > 8) return null;
-  if (board[index] !== '')    return null;
+  if (board[index] !== "") return null;
   const next = board.slice();
   next[index] = player;
   return next;
@@ -56,11 +61,43 @@ function checkWinner(board) {
       return { winner: board[a], combo };
     }
   }
-  if (board.every(cell => cell !== '')) return { winner: null, combo: [] };
+  if (board.every((cell) => cell !== "")) return { winner: null, combo: [] };
   return null;
 }
 
+/**
+ * Returns the visual symbol for a player mark.
+ * @param {string} symbol
+ * @param {string} xSymbol
+ * @param {string} oSymbol
+ * @returns {string}
+ */
+function replaceSymbol(symbol, xSymbol, oSymbol) {
+  if (symbol === "X") return xSymbol;
+  if (symbol === "O") return oSymbol;
+  return "";
+}
+
+/**
+ * Returns a new board with X/O replaced by their emoji equivalents.
+ * @param {string[]} board
+ * @param {string} xSymbol
+ * @param {string} oSymbol
+ * @returns {string[]}
+ */
+function replaceSymbols(board, xSymbol, oSymbol) {
+  return board.map((s) => replaceSymbol(s, xSymbol, oSymbol));
+}
+
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    WINNING_COMBOS,
+    createInitialState,
+    getNextPlayer,
+    applyMove,
+    checkWinner,
+    replaceSymbol,
+    replaceSymbols,
+  };
 }
