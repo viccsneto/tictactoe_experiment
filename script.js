@@ -4,10 +4,12 @@
 // are provided by game.js, loaded before this script.
 
 const cells    = document.querySelectorAll('.cell');
-const status   = document.getElementById('status');
+const statusEl = document.getElementById('status');
+const catScoreInterface = document.getElementById('cat-score');
+const dogScoreInterface = document.getElementById('dog-score');
 const restartBtn     = document.getElementById('restart');
 
-let state = createInitialState();
+let state;
 
 function render() {
   cells.forEach((cell, i) => {
@@ -18,8 +20,14 @@ function render() {
 }
 
 function setStatus(msg, cls = '') {
-  status.textContent = msg;
-  status.className   = 'status' + (cls ? ` ${cls}` : '');
+  statusEl.textContent = msg;
+  statusEl.className   = 'status' + (cls ? ` ${cls}` : '');
+}
+
+function renderScores() {
+  const scores = getScores();
+  catScoreInterface.textContent = scores['😺'];
+  dogScoreInterface.textContent = scores['🐶'];
 }
 
 function handleClick(e) {
@@ -41,6 +49,7 @@ function handleClick(e) {
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
       setStatus(`Player ${result.winner} wins!`, 'win');
+      renderScores();
     } else {
       setStatus("It's a draw!", 'draw');
     }
@@ -56,12 +65,12 @@ function handleClick(e) {
 function restartGame() {
   state = createInitialState();
   render();
+  renderScores();
   setStatus(`Player ${state.current}'s turn`);
 }
 
 cells.forEach(cell => cell.addEventListener('click', handleClick));
 restartBtn.addEventListener('click', restartGame);
 
-// Initial render
-render();
-setStatus(`Player ${state.current}'s turn`);
+// Initialize a fresh game state whenever the page is loaded/refreshed.
+window.addEventListener('load', restartGame);

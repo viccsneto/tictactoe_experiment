@@ -6,6 +6,9 @@ const WINNING_COMBOS = [
   [0, 4, 8], [2, 4, 6],            // diagonals
 ];
 
+let catScore = 0;
+let dogScore = 0;
+
 /**
  * Returns the initial game state.
  */
@@ -15,6 +18,18 @@ function createInitialState() {
     current: '😺',
     gameOver: false,
   };
+}
+
+function getScores() {
+  return { '😺': catScore, '🐶': dogScore };
+}
+
+function incrementScore(winner) {
+  if (winner === '😺') {
+    catScore += 1;
+  } else if (winner === '🐶') {
+    dogScore += 1;
+  }
 }
 
 /**
@@ -53,7 +68,9 @@ function checkWinner(board) {
   for (const combo of WINNING_COMBOS) {
     const [a, b, c] = combo;
     if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return { winner: board[a], combo };
+      const winner = board[a];
+      incrementScore(winner);
+      return { winner, combo };
     }
   }
   if (board.every(cell => cell !== '')) return { winner: null, combo: [] };
@@ -62,6 +79,6 @@ function checkWinner(board) {
 
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
+  module.exports = { WINNING_COMBOS, createInitialState, getScores, getNextPlayer, applyMove, checkWinner };
 }
 

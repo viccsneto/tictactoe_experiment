@@ -6,19 +6,21 @@
 If present, use `.github/agents/brainsback-reviewer.md` as the review rubric.
 
 ## Snapshot
-- **Change**: Replaced TicTacToe board markers from `X`/`O` to `😺`/`🐶` in core game logic and unit tests.
+- **Change**: Added a live score system for `😺` and `🐶`, including UI display and automated score updates on wins.
 - **Status**: Completed and verified.
 
 ## The Changes
-- Updated [game.js](../game.js) to use `😺` and `🐶` as player markers in initial state, next-player logic, and marker-related JSDoc/comments.
-- Updated [tests/game.test.js](../tests/game.test.js) expected values/comments/board fixtures from `X`/`O` to `😺`/`🐶`.
-- Fixed Unicode parsing in test helper `boardFrom` by switching from `split('')` to `Array.from(...)`, so emoji markers are treated as full symbols.
+- Updated [game.js](../game.js) to track cumulative integer scores for both players and increment the correct score when `checkWinner()` detects a winner.
+- Updated [index.html](../index.html) to render a scoreboard using `.scoreboard` and `.score`.
+- Updated [script.js](../script.js) to sync the displayed scores from game state whenever a win is detected.
+- Updated [script.js](../script.js) variable names for score DOM references to `catScoreInterface` and `dogScoreInterface` to avoid name duplication with game-state score variables.
+- Updated [tests/game.test.js](../tests/game.test.js) to verify score incrementation on a winning board.
 
 ## Testing Strategy
 _How we ensured it works._
 
 - Executed [tests/game.test.js](../tests/game.test.js) via a Node-based harness equivalent to the in-browser runner.
-- Result: **31 passed, 0 failed**.
+- Result: **32 passed, 0 failed**.
 
 ## Risks & Follow-up
 - Manual UI confirmation remains recommended to visually verify emoji rendering in the board.

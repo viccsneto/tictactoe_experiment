@@ -57,6 +57,27 @@ describe('createInitialState', () => {
 });
 
 // ---------------------------------------------------------------------------
+// score tracking
+// ---------------------------------------------------------------------------
+
+describe('score tracking', () => {
+  test('increments the winner score when checkWinner detects a win', () => {
+    const before = getScores();
+    const board = new Array(9).fill('');
+    board[0] = '😺';
+    board[1] = '😺';
+    board[2] = '😺';
+
+    const result = checkWinner(board);
+    const after = getScores();
+
+    expect(result.winner).toBe('😺');
+    expect(after['😺']).toBe(before['😺'] + 1);
+    expect(after['🐶']).toBe(before['🐶']);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // getNextPlayer
 // ---------------------------------------------------------------------------
 
@@ -76,13 +97,13 @@ describe('getNextPlayer', () => {
 
 describe('applyMove', () => {
   test('places the player mark on the correct cell', () => {
-    const board = Array(9).fill('');
+    const board = new Array(9).fill('');
     const next = applyMove(board, 4, '😺');
     expect(next[4]).toBe('😺');
   });
 
   test('does not mutate the original board', () => {
-    const board = Array(9).fill('');
+    const board = new Array(9).fill('');
     applyMove(board, 0, '😺');
     expect(board[0]).toBe('');
   });
@@ -93,15 +114,15 @@ describe('applyMove', () => {
   });
 
   test('returns null for index below 0', () => {
-    expect(applyMove(Array(9).fill(''), -1, '😺')).toBeNull();
+    expect(applyMove(new Array(9).fill(''), -1, '😺')).toBeNull();
   });
 
   test('returns null for index above 8', () => {
-    expect(applyMove(Array(9).fill(''), 9, '😺')).toBeNull();
+    expect(applyMove(new Array(9).fill(''), 9, '😺')).toBeNull();
   });
 
   test('all other cells remain unchanged', () => {
-    const board = Array(9).fill('');
+    const board = new Array(9).fill('');
     const next = applyMove(board, 3, '🐶');
     next.forEach((cell, i) => {
       if (i !== 3) expect(cell).toBe('');
@@ -115,7 +136,7 @@ describe('applyMove', () => {
 
 describe('checkWinner - in-progress games return null', () => {
   test('empty board', () => {
-    expect(checkWinner(Array(9).fill(''))).toBeNull();
+    expect(checkWinner(new Array(9).fill(''))).toBeNull();
   });
 
   test('one move played', () => {
@@ -152,12 +173,11 @@ describe('checkWinner - 😺 wins', () => {
   });
 
   test('bottom row', () => {
-    const board = boardFrom('🐶🐶 🐶🐶😺😺😺 ');
     //                       012 345 678
     // Wait: '🐶🐶 🐶🐶😺😺😺 ' -> indices 6,7,8 = 😺,😺,😺 - no wait let me recount
     // '🐶🐶 🐶🐶😺😺😺 ' -> 🐶 🐶 ' ' 🐶 🐶 😺 😺 😺 ' '
     // Actually let me fix this properly
-    const b = Array(9).fill('');
+    const b = new Array(9).fill('');
     b[6] = '😺'; b[7] = '😺'; b[8] = '😺';
     b[0] = '🐶'; b[1] = '🐶'; b[3] = '🐶';
     const result = checkWinner(b);
@@ -166,7 +186,7 @@ describe('checkWinner - 😺 wins', () => {
   });
 
   test('left column', () => {
-    const b = Array(9).fill('');
+    const b = new Array(9).fill('');
     b[0] = '😺'; b[3] = '😺'; b[6] = '😺';
     b[1] = '🐶'; b[4] = '🐶';
     const result = checkWinner(b);
@@ -175,7 +195,7 @@ describe('checkWinner - 😺 wins', () => {
   });
 
   test('middle column', () => {
-    const b = Array(9).fill('');
+    const b = new Array(9).fill('');
     b[1] = '😺'; b[4] = '😺'; b[7] = '😺';
     b[0] = '🐶'; b[3] = '🐶';
     const result = checkWinner(b);
@@ -184,7 +204,7 @@ describe('checkWinner - 😺 wins', () => {
   });
 
   test('right column', () => {
-    const b = Array(9).fill('');
+    const b = new Array(9).fill('');
     b[2] = '😺'; b[5] = '😺'; b[8] = '😺';
     b[0] = '🐶'; b[1] = '🐶';
     const result = checkWinner(b);
@@ -193,7 +213,7 @@ describe('checkWinner - 😺 wins', () => {
   });
 
   test('main diagonal (top-left to bottom-right)', () => {
-    const b = Array(9).fill('');
+    const b = new Array(9).fill('');
     b[0] = '😺'; b[4] = '😺'; b[8] = '😺';
     b[1] = '🐶'; b[2] = '🐶';
     const result = checkWinner(b);
@@ -202,7 +222,7 @@ describe('checkWinner - 😺 wins', () => {
   });
 
   test('anti-diagonal (top-right to bottom-left)', () => {
-    const b = Array(9).fill('');
+    const b = new Array(9).fill('');
     b[2] = '😺'; b[4] = '😺'; b[6] = '😺';
     b[0] = '🐶'; b[1] = '🐶';
     const result = checkWinner(b);
@@ -213,7 +233,7 @@ describe('checkWinner - 😺 wins', () => {
 
 describe('checkWinner - 🐶 wins', () => {
   test('top row', () => {
-    const b = Array(9).fill('');
+    const b = new Array(9).fill('');
     b[0] = '🐶'; b[1] = '🐶'; b[2] = '🐶';
     b[3] = '😺'; b[4] = '😺';
     const result = checkWinner(b);
@@ -222,7 +242,7 @@ describe('checkWinner - 🐶 wins', () => {
   });
 
   test('left column', () => {
-    const b = Array(9).fill('');
+    const b = new Array(9).fill('');
     b[0] = '🐶'; b[3] = '🐶'; b[6] = '🐶';
     b[1] = '😺'; b[4] = '😺';
     const result = checkWinner(b);
@@ -236,7 +256,6 @@ describe('checkWinner - draw', () => {
     // 😺 🐶 😺
     // 😺 😺 🐶
     // 🐶 😺 🐶  - no three in a row
-    const b = boardFrom('😺🐶😺😺😺🐶🐶🐶🐶');
     // Wait let me think: 😺 🐶 😺 / 😺 😺 🐶 / 🐶 😺 🐶
     // Row 0: 😺 🐶 😺 - no
     // Row 1: 😺 😺 🐶 - no
@@ -287,7 +306,7 @@ describe('checkWinner - draw', () => {
 
 describe('checkWinner - result shape', () => {
   test('winning result has winner string and combo array', () => {
-    const b = Array(9).fill('');
+    const b = new Array(9).fill('');
     b[0] = '😺'; b[1] = '😺'; b[2] = '😺';
     const result = checkWinner(b);
     expect(typeof result.winner).toBe('string');
@@ -296,7 +315,7 @@ describe('checkWinner - result shape', () => {
   });
 
   test('combo indices are valid board positions', () => {
-    const b = Array(9).fill('');
+    const b = new Array(9).fill('');
     b[0] = '🐶'; b[1] = '🐶'; b[2] = '🐶';
     const { combo } = checkWinner(b);
     combo.forEach(i => {
