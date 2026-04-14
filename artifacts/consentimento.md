@@ -30,8 +30,8 @@ Departamento de Informática, PUC-Rio
 ### Declaração de Consentimento
 
 - **Matrícula:** 
-  SUBSTITUIR_POR_SUA_MATRICULA
+  2320594
   **Nome completo:**
-  SUBSTITUIR_POR_SEU_NOME
+  Luidgi de Jesus da Silva Colimerio
 - **Você consente com a coleta e o uso dos seus dados anonimizados para esta pesquisa?** 
-  [Sim / Não]
+  Sim
