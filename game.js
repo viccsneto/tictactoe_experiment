@@ -1,5 +1,11 @@
 'use strict';
 
+const PLAYER_SYMBOLS = { X: '🐱', O: '🐶' };
+
+function getPlayerSymbol(player) {
+  return PLAYER_SYMBOLS[player] || player;
+}
+
 const WINNING_COMBOS = [
   [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
   [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
@@ -62,5 +68,5 @@ function checkWinner(board) {
 
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
+  module.exports = { PLAYER_SYMBOLS, getPlayerSymbol, WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
 }
