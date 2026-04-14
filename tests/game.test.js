@@ -292,104 +292,98 @@ describe('checkWinner — result shape', () => {
 // ---------------------------------------------------------------------------
 
 describe('Scoring System', () => {
-  let mockState;
-  let mockCatScore;
-  let mockDogScore;
-
   beforeEach(() => {
-    // Reset global state for testing
-    mockState = createInitialState();
-    mockCatScore = { textContent: '0' };
-    mockDogScore = { textContent: '0' };
-
-    // Mock DOM elements
-    global.document = {
-      getElementById: (id) => {
-        if (id === 'cat-score') return mockCatScore;
-        if (id === 'dog-score') return mockDogScore;
-        return null;
-      },
-      querySelectorAll: () => [],
-    };
-
-    // Override the global state for testing
-    global.state = mockState;
-    global.CAT = '🐱';
-    global.DOG = '🐶';
+    // Reset game state and UI for each test
+    state = createInitialState();
+    updateScoreboard();
+    render();
   });
 
   test('updateScoreboard displays correct scores', () => {
-    mockState.scores['🐱'] = 3;
-    mockState.scores['🐶'] = 2;
+    state.scores['🐱'] = 3;
+    state.scores['🐶'] = 2;
 
     updateScoreboard();
 
-    expect(mockCatScore.textContent).toBe('3');
-    expect(mockDogScore.textContent).toBe('2');
+    expect(document.getElementById('cat-score').textContent).toBe('3');
+    expect(document.getElementById('dog-score').textContent).toBe('2');
   });
 
   test('scores are initialized to zero', () => {
     updateScoreboard();
 
-    expect(mockCatScore.textContent).toBe('0');
-    expect(mockDogScore.textContent).toBe('0');
+    expect(document.getElementById('cat-score').textContent).toBe('0');
+    expect(document.getElementById('dog-score').textContent).toBe('0');
   });
 
   test('cat score increments when cat wins', () => {
-    // Simulate cat winning by setting up a winning board
-    mockState.board = ['🐱', '🐱', '🐱', '', '', '', '', '', ''];
-    mockState.current = '🐱';
+    state.board = ['🐱', '🐱', '🐱', '', '', '', '', '', ''];
+    state.current = '🐱';
 
-    // Simulate the win detection and scoring logic
-    const result = checkWinner(mockState.board);
+    const result = checkWinner(state.board);
     if (result && result.winner) {
-      mockState.scores[result.winner]++;
+      state.scores[result.winner]++;
       updateScoreboard();
     }
 
-    expect(mockState.scores['🐱']).toBe(1);
-    expect(mockCatScore.textContent).toBe('1');
-    expect(mockState.scores['🐶']).toBe(0);
-    expect(mockDogScore.textContent).toBe('0');
+    expect(state.scores['🐱']).toBe(1);
+    expect(document.getElementById('cat-score').textContent).toBe('1');
+    expect(state.scores['🐶']).toBe(0);
+    expect(document.getElementById('dog-score').textContent).toBe('0');
   });
 
   test('dog score increments when dog wins', () => {
-    // Simulate dog winning
-    mockState.board = ['🐶', '🐶', '🐶', '', '', '', '', '', ''];
-    mockState.current = '🐶';
+    state.board = ['🐶', '🐶', '🐶', '', '', '', '', '', ''];
+    state.current = '🐶';
 
-    const result = checkWinner(mockState.board);
+    const result = checkWinner(state.board);
     if (result && result.winner) {
-      mockState.scores[result.winner]++;
+      state.scores[result.winner]++;
       updateScoreboard();
     }
 
-    expect(mockState.scores['🐶']).toBe(1);
-    expect(mockDogScore.textContent).toBe('1');
-    expect(mockState.scores['🐱']).toBe(0);
-    expect(mockCatScore.textContent).toBe('0');
+    expect(state.scores['🐶']).toBe(1);
+    expect(document.getElementById('dog-score').textContent).toBe('1');
+    expect(state.scores['🐱']).toBe(0);
+    expect(document.getElementById('cat-score').textContent).toBe('0');
   });
 
   test('scores persist across multiple games', () => {
     // First game: cat wins
-    mockState.board = ['🐱', '🐱', '🐱', '', '', '', '', '', ''];
-    let result = checkWinner(mockState.board);
+    state.board = ['🐱', '🐱', '🐱', '', '', '', '', '', ''];
+    let result = checkWinner(state.board);
     if (result && result.winner) {
-      mockState.scores[result.winner]++;
+      state.scores[result.winner]++;
     }
 
     // Second game: dog wins
-    mockState.board = ['🐶', '', '', '🐶', '', '', '🐶', '', ''];
-    result = checkWinner(mockState.board);
+    state.board = ['🐶', '', '', '🐶', '', '', '🐶', '', ''];
+    result = checkWinner(state.board);
     if (result && result.winner) {
-      mockState.scores[result.winner]++;
+      state.scores[result.winner]++;
     }
 
     updateScoreboard();
 
-    expect(mockState.scores['🐱']).toBe(1);
-    expect(mockState.scores['🐶']).toBe(1);
-    expect(mockCatScore.textContent).toBe('1');
-    expect(mockDogScore.textContent).toBe('1');
+    expect(state.scores['🐱']).toBe(1);
+    expect(state.scores['🐶']).toBe(1);
+    expect(document.getElementById('cat-score').textContent).toBe('1');
+    expect(document.getElementById('dog-score').textContent).toBe('1');
+  });
+
+  test('restartGame preserves scores while resetting the board', () => {
+    state.scores['🐱'] = 2;
+    state.scores['🐶'] = 1;
+    state.board = ['🐱', '🐱', '🐱', '', '', '', '', '', ''];
+    state.gameOver = true;
+
+    restartGame();
+
+    expect(state.scores['🐱']).toBe(2);
+    expect(state.scores['🐶']).toBe(1);
+    expect(document.getElementById('cat-score').textContent).toBe('2');
+    expect(document.getElementById('dog-score').textContent).toBe('1');
+    expect(state.board.every(c => c === '')).toBe(true);
+    expect(state.gameOver).toBe(false);
   });
 });

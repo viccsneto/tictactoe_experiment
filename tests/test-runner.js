@@ -73,4 +73,6 @@ window.addEventListener('load', async () => {
   }
 
   summaryDiv.innerHTML = `Tests: <span class="summary-passed">${passedCount} passed</span>, <span class="summary-failed">${failedCount} failed</span> out of ${passedCount + failedCount}`;
+  resultsDiv.style.display = 'block';
+  summaryDiv.style.display = 'block';
 });
