@@ -5,27 +5,27 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## R — The Problem
-_Repita_com_suas_palavras_qual_o_problema_sendo_resolvido_
+Estou trocando a forma de representação visual dos jogadores, em vez do clássico X e O, agora será emojis de gatinho e cachorro, usando IA como assistente.
 
 ## E — Examples
 _Exemplos_de_entrada_saída_ou_situacao_e_resposta_
 
-- **Input**: 
+- **Input**: Aparece vez do 🐱, ao clicar uma célula, aparece 🐱 escolhida.
 
-  **Output**:
+  **Output**: 🐶 preenche todas as células de uma fileira, aparece 🐶 ganhou.
 
-- **Input**:
+- **Input**: qualquer um dos dois clica em new game
 
-  **Output**:
+  **Output**: reseta o jogo, tirando todas as celulas preenchidas.
 
 ## A — Approach
-_Um_paragrafo_descrevendo_a_estrategia_para_a_solucao_do_problema_
+criar um dicionário que identifica o X e O para seus respectivos emojis e uma função para que converte eles no código. depois de substituir onde necessário. Os testes não foram necessários porque nao alterou logica interna.
 
 ## C — Code
-_Liste_as_funcoes__onde_elas_foram_implementadas_e_de_onde_sao_chamadas_para_resolver_o_problema_
+2 arquivos principais: game.js, onde tem o dicionário PLAYER_SYMBOLS e a função getPlayerSymbol(player) e script.js, onde onde exibe usa o getPlayerSymbol, a lógica mantém com X e O.
 
 ## T — Tests
-_Como_voce_testou_que_o_problema_foi_resolvido__informe_testes_manuais_e_automaticos_
+os testes continuam rodando como esperado e testei manualmente para ver os simbolos funcionando
 
 ## O — Optimization
-_Analise_bigO__pode_nao_se_aplicar_em_alguns_casos_
+Não acho que se aplica, não alterei nada que acho relevante em termos de complexidade.
