@@ -3,16 +3,33 @@
 // WINNING_COMBOS, checkWinner, getNextPlayer, applyMove, createInitialState
 // are provided by game.js, loaded before this script.
 
+const CAT = '🐱';
+const DOG = '🐶';
+
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const catScore = document.getElementById('cat-score');
+const dogScore = document.getElementById('dog-score');
 
 let state = createInitialState();
+
+function getPlayerClass(emoji) {
+  if (emoji === CAT) return 'x';
+  if (emoji === DOG) return 'o';
+  return '';
+}
+
+function updateScoreboard() {
+  catScore.textContent = state.scores[CAT];
+  dogScore.textContent = state.scores[DOG];
+}
 
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    const cssClass = getPlayerClass(state.board[i]);
+    cell.className   = 'cell' + (cssClass ? ` ${cssClass}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
 }
@@ -39,6 +56,8 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      state.scores[result.winner]++;
+      updateScoreboard();
       result.combo.forEach(i => cells[i].classList.add('winning'));
       setStatus(`Player ${result.winner} wins!`, 'win');
     } else {
@@ -54,8 +73,12 @@ function handleClick(e) {
 }
 
 function restartGame() {
+  // Preserve scores while resetting the game
+  const currentScores = state.scores;
   state = createInitialState();
+  state.scores = currentScores; // Restore the preserved scores
   render();
+  updateScoreboard();
   setStatus(`Player ${state.current}'s turn`);
 }
 
@@ -64,4 +87,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
+updateScoreboard();
 setStatus(`Player ${state.current}'s turn`);
