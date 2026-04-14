@@ -14,6 +14,10 @@ function createInitialState() {
     board:   Array(9).fill(''),
     current: '🐱',
     gameOver: false,
+    scores: {
+      '🐱': 0,
+      '🐶': 0,
+    },
   };
 }
 

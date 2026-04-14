@@ -5,18 +5,20 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## The Problem
-_One or two sentences on what we're solving._
+Change the code so that the tictactoe game has a new system that counts the amount of wins each players (🐱 (cat face) and 🐶 (dog face)) has won and shows it to the user at the left side of the screen.
 
 ## Steps
-- [ ] 
-- [ ] 
-- [ ] Update the test cases
-
+- [x] Find the adequate location for the code for this new functionallity (if it does not exist create it)
+- [x] Track the amount of times each player won and increase it every time they win
+- [x] Create a display for this information at the left side of the screen
+- [x] Update the display everytime the score changes
+- [x] Update and create test cases if necessary
 
 ## Success Looks Like
-- [ ] 
-- [ ] 
-- [ ] All tests pass
+- [x] Leaderboard is shown at all times
+- [x] When cat player wins scoreboard is updated correctly
+- [x] When dog player wins scoreboard is updated correctly
+- [x] All tests pass
 
 ## Notes
 - [ ] 

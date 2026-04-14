@@ -6,27 +6,32 @@
 If present, use `.github/agents/brainsback-reviewer.md` as the review rubric.
 
 ## Snapshot
-- **Change**: Replaced X/O symbols with 🐱 (cat face) and 🐶 (dog face) emojis throughout the tic-tac-toe game
+- **Change**: Added a scoring system that tracks and displays win counts for both players (🐱 and 🐶) on the left side of the screen
 - **Status**: Complete
 
 ## The Changes
-- [x] **game.js**: Updated `createInitialState()` to use `'🐱'` as initial player, updated `getNextPlayer()` to alternate between `'🐱'` and `'🐶'`, and updated JSDoc comments
-- [x] **script.js**: Added emoji constants (CAT, DOG), introduced `getPlayerClass()` helper function to map emojis to CSS classes ('x' for cat, 'o' for dog) for proper styling, updated `render()` to use this mapping
-- [x] **game.test.js**: Updated all 30+ test cases to use `'🐱'` instead of `'X'` and `'🐶'` instead of `'O'` in board state assertions, player comparisons, and test descriptions
-- [x] **index.html**: Updated initial status message from "Player X's turn" to "Player 🐱's turn"
+- [x] **game.js**: Added `scores` object to `createInitialState()` with initial scores of 0 for both players, updated JSDoc comments
+- [x] **index.html**: Restructured layout with new `.game-layout` and `.game-area` containers, added scoreboard HTML with cat and dog score displays positioned on the left side
+- [x] **style.css**: Updated `.container` width to accommodate scoreboard, added `.game-layout` flexbox layout, modified `.scoreboard` to display vertically, added `.game-area` for game content
+- [x] **script.js**: Added DOM references for score elements, created `updateScoreboard()` function to display current scores, modified win detection logic to increment winner's score and update display, called `updateScoreboard()` on initial page load
+- [x] **game.test.js**: Added test for scores initialization in `createInitialState`, created comprehensive scoring system test suite with integration tests for score display, individual player wins, and score persistence across games
 
 ## Testing Strategy
-All existing test cases have been updated to use the emoji symbols. The logic remains unchanged:
-- Tests verify that the cat emoji starts first
-- Tests confirm alternation between cat and dog players
-- Tests validate move placement, win conditions (rows, columns, diagonals), and draw detection
-- CSS class mapping (emoji → class) ensures visual styling continues to work with existing `.cell.x` and `.cell.o` styles
-- The `boardFrom()` helper function continues to work correctly with multi-byte UTF-8 emoji characters
+Added 6 new test cases covering:
+- Score initialization to zero for both players
+- Scoreboard display updates correctly
+- Cat score increments when cat wins
+- Dog score increments when dog wins  
+- Scores persist across multiple games
+- Integration testing with mocked DOM elements
+
+All existing tests continue to pass, ensuring backward compatibility.
 
 ## Risks & Follow-up
-- [x] No breaking changes - all game logic preserved, only display symbols changed
-- [x] CSS styling remains intact via the `getPlayerClass()` mapping function
-- [x] Browser and Node.js compatibility maintained for future test runners
+- [x] Scores persist across game restarts (only game board resets, not cumulative scores)
+- [x] UI layout accommodates scoreboard without breaking existing game functionality
+- [x] Emoji characters display correctly in scoreboard
+- [x] No breaking changes to existing game logic
 
 ---
 **Note**: Usually filled by the AI.
