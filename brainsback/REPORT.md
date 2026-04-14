@@ -7,11 +7,14 @@ If present, use `.github/agents/brainsback-reviewer.md` as the review rubric.
 
 ## Snapshot
 
-- **Change**: Modified symbol replacement functions to accept custom symbols as parameters, and fixed game UI bugs.
+- **Change**: Added scoreboard to track wins for both players, alongside symbol replacement and UI fixes.
 - **Status**: Implementation complete, ready for testing.
 
 ## The Changes
 
+- **index.html**: Added scoreboard div with win counters for each player.
+- **style.css**: Updated scoreboard styles for the new layout.
+- **script.js**: Added win counters (xWins, oWins), updateScoreboard function, and logic to increment wins on victory. Updated initial render to show scoreboard.
 - **game.js**: Updated `replaceSymbol(symbol, xSymbol, oSymbol)` and `replaceSymbols(board, xSymbol, oSymbol)` to take symbol parameters instead of hardcoding emojis.
 - **script.js**: Added constants `X_SYMBOL = '😺'` and `O_SYMBOL = '🐶'`, updated all calls to `replaceSymbol` and `setStatus` to pass these symbols. Added missing `restartGame` function and event listeners. Removed duplicate render/setStatus calls in `handleClick`.
 - **tests/game.test.js**: Updated test cases for `replaceSymbol` and `replaceSymbols` to pass symbol parameters.

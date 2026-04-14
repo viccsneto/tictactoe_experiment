@@ -6,11 +6,15 @@
 const cells = document.querySelectorAll(".cell");
 const status = document.getElementById("status");
 const restartBtn = document.getElementById("restart");
+const xWinsEl = document.getElementById("x-wins");
+const oWinsEl = document.getElementById("o-wins");
 
 const X_SYMBOL = "😺";
 const O_SYMBOL = "🐶";
 
 let state = createInitialState();
+let xWins = 0;
+let oWins = 0;
 
 function render() {
   cells.forEach((cell, i) => {
@@ -21,6 +25,11 @@ function render() {
       "cell" + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : "");
     cell.disabled = state.board[i] !== "" || state.gameOver;
   });
+}
+
+function updateScoreboard() {
+  xWinsEl.textContent = xWins;
+  oWinsEl.textContent = oWins;
 }
 
 function setStatus(msg, cls = "") {
@@ -46,6 +55,9 @@ function handleClick(e) {
     state.gameOver = true;
     if (result.winner) {
       result.combo.forEach((i) => cells[i].classList.add("winning"));
+      if (result.winner === "X") xWins++;
+      if (result.winner === "O") oWins++;
+      updateScoreboard();
       setStatus(
         `Player ${replaceSymbol(result.winner, X_SYMBOL, O_SYMBOL)} wins!`,
         "win",
@@ -77,4 +89,5 @@ restartBtn.addEventListener("click", restartGame);
 
 // Initial render
 render();
+updateScoreboard();
 setStatus(`Player ${replaceSymbol(state.current, X_SYMBOL, O_SYMBOL)}'s turn`);
