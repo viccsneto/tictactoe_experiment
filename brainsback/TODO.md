@@ -5,18 +5,18 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## The Problem
-_One or two sentences on what we're solving._
+Replacing 'X' and 'O' characters that represent a board's house fill with '😺' and '🐶', respectively.
 
 ## Steps
-- [ ] 
-- [ ] 
-- [ ] Update the test cases
-
+- [ ] 1. Find all places where 'X' is used to represent a board's house fill in [game.js](../game.js)
+- [ ] 2. Replace all the found ocurrences of 'X' from the last step with '😺', including the comments!
+- [ ] 3. Find all places where 'O' is used to represent a board's house fill in [game.js](../game.js)
+- [ ] 4. Replace all the found ocurrences of 'X' from the last step with '🐶', including the comments!
+- [ ] Repeat steps 1. to 4. but instead of doing it in [game.js](../game.js), do it in [tests/game.test.js](../tests/game.test.js)
 
 ## Success Looks Like
-- [ ] 
-- [ ] 
-- [ ] All tests pass
+- [ ] '😺' and '🐶' appear in the screen instead of 'X' and 'O'. (Human review needed for this one)
+- [ ] Run [tests/game.test.js](../tests/game.test.js) and make sure all the tests pass
 
 ## Notes
 - [ ] 
