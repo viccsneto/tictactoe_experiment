@@ -3,16 +3,26 @@
 // WINNING_COMBOS, checkWinner, getNextPlayer, applyMove, createInitialState
 // are provided by game.js, loaded before this script.
 
+const CAT = '🐱';
+const DOG = '🐶';
+
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
 
 let state = createInitialState();
 
+function getPlayerClass(emoji) {
+  if (emoji === CAT) return 'x';
+  if (emoji === DOG) return 'o';
+  return '';
+}
+
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    const cssClass = getPlayerClass(state.board[i]);
+    cell.className   = 'cell' + (cssClass ? ` ${cssClass}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
 }
