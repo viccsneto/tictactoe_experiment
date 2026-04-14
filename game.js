@@ -72,7 +72,25 @@ function displaySymbol(symbol) {
   return '';
 }
 
+/**
+ * Checks if a game result is a victory (not a draw).
+ * @param {{ winner: string, combo: number[] }|{ winner: null, combo: [] }|null} result
+ * @returns {boolean}
+ */
+function isVictory(result) {
+  return result !== null && result.winner !== null;
+}
+
+/**
+ * Checks if a game result is a draw.
+ * @param {{ winner: string, combo: number[] }|{ winner: null, combo: [] }|null} result
+ * @returns {boolean}
+ */
+function isDraw(result) {
+  return result !== null && result.winner === null;
+}
+
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner, displaySymbol };
+  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner, displaySymbol, isVictory, isDraw };
 }

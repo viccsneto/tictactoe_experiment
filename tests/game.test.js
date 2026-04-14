@@ -328,3 +328,49 @@ describe('displaySymbol', () => {
     expect(displaySymbol('O')).toBe(displaySymbol('O'));
   });
 });
+
+// ---------------------------------------------------------------------------
+// Scoreboard Helpers: isVictory, isDraw
+// ---------------------------------------------------------------------------
+
+describe('isVictory', () => {
+  test('returns true when X wins', () => {
+    const result = { winner: 'X', combo: [0, 1, 2] };
+    expect(isVictory(result)).toBe(true);
+  });
+
+  test('returns true when O wins', () => {
+    const result = { winner: 'O', combo: [0, 3, 6] };
+    expect(isVictory(result)).toBe(true);
+  });
+
+  test('returns false for a draw', () => {
+    const result = { winner: null, combo: [] };
+    expect(isVictory(result)).toBe(false);
+  });
+
+  test('returns false for null (game in progress)', () => {
+    expect(isVictory(null)).toBe(false);
+  });
+});
+
+describe('isDraw', () => {
+  test('returns true when result is a draw', () => {
+    const result = { winner: null, combo: [] };
+    expect(isDraw(result)).toBe(true);
+  });
+
+  test('returns false when X wins', () => {
+    const result = { winner: 'X', combo: [0, 1, 2] };
+    expect(isDraw(result)).toBe(false);
+  });
+
+  test('returns false when O wins', () => {
+    const result = { winner: 'O', combo: [3, 4, 5] };
+    expect(isDraw(result)).toBe(false);
+  });
+
+  test('returns false for null (game in progress)', () => {
+    expect(isDraw(null)).toBe(false);
+  });
+});
