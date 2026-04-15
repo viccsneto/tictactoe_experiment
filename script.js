@@ -6,13 +6,30 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const catScoreEl = document.getElementById('score-cat');
+const dogScoreEl = document.getElementById('score-dog');
 
 let state = createInitialState();
+const score = {
+  [PLAYER_CAT]: 0,
+  [PLAYER_DOG]: 0,
+};
+
+function renderScore() {
+  if (catScoreEl) catScoreEl.textContent = String(score[PLAYER_CAT]);
+  if (dogScoreEl) dogScoreEl.textContent = String(score[PLAYER_DOG]);
+}
+
+function playerCssClass(player) {
+  if (player === PLAYER_CAT) return 'cat';
+  if (player === PLAYER_DOG) return 'dog';
+  return '';
+}
 
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    cell.className   = 'cell' + (state.board[i] ? ` ${playerCssClass(state.board[i])}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
 }
@@ -39,10 +56,12 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      score[result.winner] += 1;
+      renderScore();
       result.combo.forEach(i => cells[i].classList.add('winning'));
-      setStatus(`Player ${result.winner} wins!`, 'win');
+      setStatus(`${result.winner} venceu!`, 'win');
     } else {
-      setStatus("It's a draw!", 'draw');
+      setStatus('Empate!', 'draw');
     }
     // Disable all cells
     cells.forEach(c => (c.disabled = true));
@@ -50,13 +69,13 @@ function handleClick(e) {
   }
 
   state.current = getNextPlayer(state.current);
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Vez do ${state.current}`);
 }
 
 function restartGame() {
   state = createInitialState();
   render();
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Vez do ${state.current}`);
 }
 
 cells.forEach(cell => cell.addEventListener('click', handleClick));
@@ -64,4 +83,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
-setStatus(`Player ${state.current}'s turn`);
+renderScore();
+setStatus(`Vez do ${state.current}`);
