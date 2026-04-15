@@ -6,7 +6,10 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const catScoreEl = document.getElementById('cat-score');
+const dogScoreEl = document.getElementById('dog-score');
 
+const score = { '🐱': 0, '🐶': 0 };
 let state = createInitialState();
 
 function render() {
@@ -21,6 +24,11 @@ function render() {
 function setStatus(msg, cls = '') {
   status.textContent = msg;
   status.className   = 'status' + (cls ? ` ${cls}` : '');
+}
+
+function renderScoreboard() {
+  catScoreEl.textContent = `🐱: ${score['🐱']}`;
+  dogScoreEl.textContent = `🐶: ${score['🐶']}`;
 }
 
 function handleClick(e) {
@@ -40,6 +48,8 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      score[result.winner]++;
+      renderScoreboard();
       result.combo.forEach(i => cells[i].classList.add('winning'));
       setStatus(`Player ${result.winner} wins!`, 'win');
     } else {
@@ -65,4 +75,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
+renderScoreboard();
 setStatus(`Player ${state.current}'s turn`);
