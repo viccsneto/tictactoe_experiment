@@ -6,13 +6,18 @@ const WINNING_COMBOS = [
   [0, 4, 8], [2, 4, 6],            // diagonals
 ];
 
+const PLAYER_X = 'X';
+const PLAYER_O = 'O';
+const PLAYER_X_ICON = '🐱';
+const PLAYER_O_ICON = '🐶';
+
 /**
  * Returns the initial game state.
  */
 function createInitialState() {
   return {
     board:   Array(9).fill(''),
-    current: 'X',
+    current: PLAYER_X,
     gameOver: false,
   };
 }
@@ -23,7 +28,18 @@ function createInitialState() {
  * @returns {'X'|'O'}
  */
 function getNextPlayer(current) {
-  return current === 'X' ? 'O' : 'X';
+  return current === PLAYER_X ? PLAYER_O : PLAYER_X;
+}
+
+/**
+ * Maps a player mark to the icon shown in the UI.
+ * @param {'X'|'O'|string} player
+ * @returns {string}
+ */
+function getPlayerIcon(player) {
+  if (player === PLAYER_X) return PLAYER_X_ICON;
+  if (player === PLAYER_O) return PLAYER_O_ICON;
+  return player;
 }
 
 /**
@@ -62,5 +78,16 @@ function checkWinner(board) {
 
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
+  module.exports = {
+    WINNING_COMBOS,
+    PLAYER_X,
+    PLAYER_O,
+    PLAYER_X_ICON,
+    PLAYER_O_ICON,
+    createInitialState,
+    getNextPlayer,
+    getPlayerIcon,
+    applyMove,
+    checkWinner,
+  };
 }

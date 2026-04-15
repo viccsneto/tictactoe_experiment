@@ -71,6 +71,34 @@ describe('getNextPlayer', () => {
 });
 
 // ---------------------------------------------------------------------------
+// getPlayerIcon
+// ---------------------------------------------------------------------------
+
+describe('getPlayerIcon', () => {
+  test('maps X to cat face emoji', () => {
+    expect(getPlayerIcon('X')).toBe('🐱');
+  });
+
+  test('maps O to dog face emoji', () => {
+    expect(getPlayerIcon('O')).toBe('🐶');
+  });
+
+  test('returns empty string for empty mark', () => {
+    expect(getPlayerIcon('')).toBe('');
+  });
+});
+
+describe('player icon constants', () => {
+  test('PLAYER_X_ICON is cat face', () => {
+    expect(PLAYER_X_ICON).toBe('🐱');
+  });
+
+  test('PLAYER_O_ICON is dog face', () => {
+    expect(PLAYER_O_ICON).toBe('🐶');
+  });
+});
+
+// ---------------------------------------------------------------------------
 // applyMove
 // ---------------------------------------------------------------------------
 
