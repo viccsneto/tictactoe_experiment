@@ -60,7 +60,37 @@ function checkWinner(board) {
   return null;
 }
 
+/**
+ * Returns the initial score object.
+ * @returns {{ X: number, O: number }}
+ */
+function createInitialScore() {
+  return { X: 0, O: 0 };
+}
+
+/**
+ * Returns a new score object with the winner incremented.
+ * @param {{ X: number, O: number }} score
+ * @param {'X'|'O'|null} winner
+ * @returns {{ X: number, O: number }}
+ */
+function applyWinToScore(score, winner) {
+  if (winner !== 'X' && winner !== 'O') return score;
+  return {
+    ...score,
+    [winner]: (score[winner] || 0) + 1,
+  };
+}
+
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
+  module.exports = {
+    WINNING_COMBOS,
+    createInitialState,
+    getNextPlayer,
+    applyMove,
+    checkWinner,
+    createInitialScore,
+    applyWinToScore,
+  };
 }

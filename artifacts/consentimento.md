@@ -30,8 +30,8 @@ Departamento de Informática, PUC-Rio
 ### Declaração de Consentimento
 
 - **Matrícula:** 
-  SUBSTITUIR_POR_SUA_MATRICULA
+  2310605
   **Nome completo:**
-  SUBSTITUIR_POR_SEU_NOME
+  Pedro Vanini de Souza Lage
 - **Você consente com a coleta e o uso dos seus dados anonimizados para esta pesquisa?** 
-  [Sim / Não]
+  [Sim]

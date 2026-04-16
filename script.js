@@ -6,12 +6,29 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const scoreXEl = document.getElementById('score-x');
+const scoreOEl = document.getElementById('score-o');
+
+const PLAYER_EMOJIS = {
+  X: '🐱',
+  O: '🐶',
+};
 
 let state = createInitialState();
+let score = createInitialScore();
+
+function toDisplaySymbol(player) {
+  return PLAYER_EMOJIS[player] || player;
+}
+
+function renderScore() {
+  if (scoreXEl) scoreXEl.textContent = String(score.X ?? 0);
+  if (scoreOEl) scoreOEl.textContent = String(score.O ?? 0);
+}
 
 function render() {
   cells.forEach((cell, i) => {
-    cell.textContent = state.board[i];
+    cell.textContent = toDisplaySymbol(state.board[i]);
     cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
@@ -39,8 +56,10 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      score = applyWinToScore(score, result.winner);
+      renderScore();
       result.combo.forEach(i => cells[i].classList.add('winning'));
-      setStatus(`Player ${result.winner} wins!`, 'win');
+      setStatus(`Player ${toDisplaySymbol(result.winner)} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
     }
@@ -50,13 +69,13 @@ function handleClick(e) {
   }
 
   state.current = getNextPlayer(state.current);
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${toDisplaySymbol(state.current)}'s turn`);
 }
 
 function restartGame() {
   state = createInitialState();
   render();
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${toDisplaySymbol(state.current)}'s turn`);
 }
 
 cells.forEach(cell => cell.addEventListener('click', handleClick));
@@ -64,4 +83,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
-setStatus(`Player ${state.current}'s turn`);
+renderScore();
+setStatus(`Player ${toDisplaySymbol(state.current)}'s turn`);

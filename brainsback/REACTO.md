@@ -5,27 +5,33 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## R — The Problem
-_Repita_com_suas_palavras_qual_o_problema_sendo_resolvido_
+_O objetivo era substituir os símbolos visuais 'X' e 'O' pelos emojis 🐱 e 🐶. O desafio era fazer essa mudança na interface sem quebrar a lógica interna que verifica quem venceu a partida._
 
 ## E — Examples
 _Exemplos_de_entrada_saída_ou_situacao_e_resposta_
 
-- **Input**: 
+- **Input**: Clique do Jogador 1 em uma célula vazia.
 
-  **Output**:
+  **Output**: A célula exibe o emoji 🐱
 
-- **Input**:
+- **Input**: Jogador 2 completa uma linha.
 
-  **Output**:
+  **Output**: O status do jogo exibe "Player 🐶 wins!".
 
 ## A — Approach
-_Um_paragrafo_descrevendo_a_estrategia_para_a_solucao_do_problema_
+_A estratégia foi separar a lógica da visualização. O motor do jogo continua processando 'X' e 'O' internamente para evitar erros nos testes. Criamos um mapeamento (dicionário) que traduz esses caracteres para emojis apenas no momento de pintar a tela_
 
 ## C — Code
-_Liste_as_funcoes__onde_elas_foram_implementadas_e_de_onde_sao_chamadas_para_resolver_o_problema_
+_script.js: Implementação do objeto de mapeamento e atualização da função de renderização das células e do status.
+
+index.html: Alteração do texto estático inicial para manter a identidade visual.
+
+game.test.js: Inclusão de testes de contrato para garantir que o motor ainda retorna 'X' e 'O'._
 
 ## T — Tests
-_Como_voce_testou_que_o_problema_foi_resolvido__informe_testes_manuais_e_automaticos_
+_Manuais: Joguei partidas no navegador para conferir se os emojis apareciam corretamente e se o botão "New Game" limpava tudo.
+
+Automáticos: Executei o Test Runner no navegador; todos os 31 testes originais passaram, além dos novos testes de representação_
 
 ## O — Optimization
-_Analise_bigO__pode_nao_se_aplicar_em_alguns_casos_
+_A utilização de um objeto para o mapeamento garante que a tradução visual seja feita em tempo constante, O(1), não impactando a performance do jogo._
