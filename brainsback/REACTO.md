@@ -5,27 +5,29 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## R — The Problem
-_Repita_com_suas_palavras_qual_o_problema_sendo_resolvido_
+Update the Tic Tac Toe symbols, from X and O to 🐱 and 🐶, respectively. Make sure the display name and tests are also updated accordingly.
 
 ## E — Examples
-_Exemplos_de_entrada_saída_ou_situacao_e_resposta_
+Player marks a space on the board
 
-- **Input**: 
+- **Input**: First player clicks on the upper-rightmost space
 
-  **Output**:
+  **Output**: The space is now occupied with a 🐱 emoji
 
-- **Input**:
+- **Input**: Second player clicks on the center space
 
-  **Output**:
+  **Output**: The space is now occupied with a 🐶 emoji
 
 ## A — Approach
-_Um_paragrafo_descrevendo_a_estrategia_para_a_solucao_do_problema_
+Every instance of X and O in the code (and tests) was inspected, and properly altered to reflect the new symbols.
 
 ## C — Code
-_Liste_as_funcoes__onde_elas_foram_implementadas_e_de_onde_sao_chamadas_para_resolver_o_problema_
+- game.js: Updated `createInitialState()` to initialize with '🐱' instead of 'X', updated `getNextPlayer()` to toggle between '🐱' and '🐶', updated JSDoc types
+- script.js: Changed player names to ("Cat (🐱)" and "Dog (🐶)")
+- tests/game.test.js: Updated all test assertions to use emoji symbols; fixed `boardFrom()` helper to use spread operator `[...str]` for proper Unicode/emoji handling
 
 ## T — Tests
-_Como_voce_testou_que_o_problema_foi_resolvido__informe_testes_manuais_e_automaticos_
+All automatic tests passed, and a couple of edge cenarios where manually testes by the user. 
 
 ## O — Optimization
-_Analise_bigO__pode_nao_se_aplicar_em_alguns_casos_
+N/A
