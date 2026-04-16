@@ -6,15 +6,33 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const catScoreEl = document.getElementById('catScore');
+const dogScoreEl = document.getElementById('dogScore');
 
+// Load scores from sessionStorage or initialize
+function loadScores() {
+  const saved = sessionStorage.getItem('scores');
+  return saved ? JSON.parse(saved) : { cat: 0, dog: 0 };
+}
+
+function saveScores(scores) {
+  sessionStorage.setItem('scores', JSON.stringify(scores));
+}
+
+let scores = loadScores();
 let state = createInitialState();
 
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i] === '😸' ? 'x' : 'o'}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
+}
+
+function updateScoreBoard() {
+  catScoreEl.textContent = scores.cat;
+  dogScoreEl.textContent = scores.dog;
 }
 
 function setStatus(msg, cls = '') {
@@ -40,7 +58,16 @@ function handleClick(e) {
     state.gameOver = true;
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
-      setStatus(`Player ${result.winner} wins!`, 'win');
+      const emoji = result.winner === '😸' ? '😸' : '🐶';
+      // Update scores
+      if (result.winner === '😸') {
+        scores.cat++;
+      } else {
+        scores.dog++;
+      }
+      saveScores(scores);
+      updateScoreBoard();
+      setStatus(`Player ${emoji} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
     }
@@ -50,13 +77,15 @@ function handleClick(e) {
   }
 
   state.current = getNextPlayer(state.current);
-  setStatus(`Player ${state.current}'s turn`);
+  const emoji = state.current === '😸' ? '😸' : '🐶';
+  setStatus(`Player ${emoji}'s turn`);
 }
 
 function restartGame() {
   state = createInitialState();
   render();
-  setStatus(`Player ${state.current}'s turn`);
+  const emoji = state.current === '😸' ? '😸' : '🐶';
+  setStatus(`Player ${emoji}'s turn`);
 }
 
 cells.forEach(cell => cell.addEventListener('click', handleClick));
@@ -64,4 +93,6 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
-setStatus(`Player ${state.current}'s turn`);
+updateScoreBoard();
+const emoji = state.current === '😸' ? '😸' : '🐶';
+setStatus(`Player ${emoji}'s turn`);

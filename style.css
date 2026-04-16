@@ -35,41 +35,30 @@ h1 {
 /* Scoreboard */
 .scoreboard {
   display: flex;
-  gap: 24px;
-  width: 100%;
+  gap: 20px;
   justify-content: center;
+  margin: 0 0 12px 0;
 }
 
-.score {
+.score-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 8px;
   background: #0f3460;
-  border-radius: 12px;
-  padding: 12px 28px;
-  gap: 4px;
-  min-width: 80px;
+  padding: 8px 16px;
+  border-radius: 8px;
 }
 
 .score-label {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #94a3b8;
-}
-
-.score-label.x-color {
-  color: #f97316;
-}
-
-.score-label.o-color {
-  color: #38bdf8;
+  font-size: 1.4rem;
 }
 
 .score-value {
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: #e2e8f0;
+  min-width: 30px;
+  text-align: center;
 }
 
 /* Status */
