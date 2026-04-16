@@ -12,14 +12,17 @@ let state = createInitialState();
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
-    cell.disabled    = state.board[i] !== '' || state.gameOver;
+    // Map symbols to class names for styling
+    const classMap = { '🐱': 'cat', '🐶': 'dog' };
+    const symbolClass = state.board[i] ? classMap[state.board[i]] : '';
+    cell.className = 'cell' + (symbolClass ? ` ${symbolClass}` : '');
+    cell.disabled = state.board[i] !== '' || state.gameOver;
   });
 }
 
 function setStatus(msg, cls = '') {
   status.textContent = msg;
-  status.className   = 'status' + (cls ? ` ${cls}` : '');
+  status.className = 'status' + (cls ? ` ${cls}` : '');
 }
 
 function handleClick(e) {
