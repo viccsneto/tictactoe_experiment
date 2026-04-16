@@ -11,17 +11,25 @@ const scoreDogValue = document.getElementById('score-dog');
 
 let state = createInitialState();
 let scoreState = {
-  X: 0,
-  O: 0,
+  '🐱': 0,
+  '🐶': 0,
 };
 
 const PLAYER_VISUAL_MAP = {
   X: '🐱',
   O: '🐶',
+  '🐱': '🐱',
+  '🐶': '🐶',
 };
 
 function toVisualMarker(marker) {
   return PLAYER_VISUAL_MAP[marker] || marker;
+}
+
+function toMarkerClass(marker) {
+  if (marker === '🐱' || marker === 'X') return 'x';
+  if (marker === '🐶' || marker === 'O') return 'o';
+  return '';
 }
 
 function formatTurnStatus(player) {
@@ -35,14 +43,15 @@ function formatWinnerStatus(player) {
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = toVisualMarker(state.board[i]);
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    const markerClass = toMarkerClass(state.board[i]);
+    cell.className   = 'cell' + (markerClass ? ` ${markerClass}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
 }
 
 function renderScoreboard() {
-  if (scoreCatValue) scoreCatValue.textContent = String(scoreState.X);
-  if (scoreDogValue) scoreDogValue.textContent = String(scoreState.O);
+  if (scoreCatValue) scoreCatValue.textContent = String(scoreState['🐱']);
+  if (scoreDogValue) scoreDogValue.textContent = String(scoreState['🐶']);
 }
 
 function registerScoreForWinner(player) {
@@ -53,8 +62,8 @@ function registerScoreForWinner(player) {
 
 function resetScoreForTests() {
   scoreState = {
-    X: 0,
-    O: 0,
+    '🐱': 0,
+    '🐶': 0,
   };
   renderScoreboard();
 }
