@@ -19,9 +19,9 @@ If present, use `.github/agents/brainsback-reviewer.md` as the review rubric.
   - Lines 15-16: Added emoji-to-CSS-class mapping (🐱 → 'cat', 🐶 → 'dog')
   - Removed `.toLowerCase()` call which doesn't work with emojis
   
-- [x] **style.css** - Updated CSS selectors
-  - Lines 123-129: Changed `.cell.x` and `.cell.o` to `.cell.cat` and `.cell.dog`
-  - Maintained original colors (orange for cat, blue for dog)
+- [x] **style.css** - Removed player-specific color styles
+  - Removed `.cell.x` and `.cell.o` CSS rules
+  - Emojis use their native colors, so player-specific styling is no longer needed
   
 - [x] **index.html** - Updated initial status message
   - Line 31: Changed "Player X's turn" to "Player 🐱's turn"
