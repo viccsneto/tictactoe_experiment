@@ -59,6 +59,12 @@ describe('createInitialState', () => {
     const s2 = createInitialState();
     expect(s1.board).not.toBe(s2.board);
   });
+
+  test('scores are initialized to 0 for both players', () => {
+    const { scores } = createInitialState();
+    expect(scores['🐱']).toBe(0);
+    expect(scores['🐶']).toBe(0);
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -72,6 +78,48 @@ describe('getNextPlayer', () => {
 
   test('🐶 -> 🐱', () => {
     expect(getNextPlayer('🐶')).toBe('🐱');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// updateScores
+// ---------------------------------------------------------------------------
+
+describe('updateScores', () => {
+  test('increments score for 🐱 when winner is 🐱', () => {
+    const state = createInitialState();
+    const updated = updateScores(state, '🐱');
+    expect(updated.scores['🐱']).toBe(1);
+    expect(updated.scores['🐶']).toBe(0);
+  });
+
+  test('increments score for 🐶 when winner is 🐶', () => {
+    const state = createInitialState();
+    const updated = updateScores(state, '🐶');
+    expect(updated.scores['🐱']).toBe(0);
+    expect(updated.scores['🐶']).toBe(1);
+  });
+
+  test('does not increment scores when winner is null (draw)', () => {
+    const state = createInitialState();
+    const updated = updateScores(state, null);
+    expect(updated.scores['🐱']).toBe(0);
+    expect(updated.scores['🐶']).toBe(0);
+  });
+
+  test('returns the same state object (mutates in place)', () => {
+    const state = createInitialState();
+    const updated = updateScores(state, '🐱');
+    expect(updated).toBe(state);
+  });
+
+  test('scores persist across multiple updates', () => {
+    const state = createInitialState();
+    updateScores(state, '🐱');
+    expect(state.scores['🐱']).toBe(1);
+    updateScores(state, '🐶');
+    expect(state.scores['🐱']).toBe(1);
+    expect(state.scores['🐶']).toBe(1);
   });
 });
 

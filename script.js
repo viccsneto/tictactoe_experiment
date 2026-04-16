@@ -11,6 +11,7 @@ const PLAYER_CLASS = {
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const scoresDiv = document.getElementById('scores');
 
 let state = createInitialState();
 
@@ -22,6 +23,11 @@ function render() {
     cell.className   = 'cell' + markClass;
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
+  renderScores();
+}
+
+function renderScores() {
+  scoresDiv.textContent = `🐱: ${state.scores['🐱']} | 🐶: ${state.scores['🐶']}`;
 }
 
 function setStatus(msg, cls = '') {
@@ -45,6 +51,7 @@ function handleClick(e) {
 
   if (result) {
     state.gameOver = true;
+    updateScores(state, result.winner);
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
       setStatus(`Player ${result.winner} wins!`, 'win');
@@ -61,7 +68,9 @@ function handleClick(e) {
 }
 
 function restartGame() {
+  const currentScores = state.scores;
   state = createInitialState();
+  state.scores = currentScores;
   render();
   setStatus(`Player ${state.current}'s turn`);
 }
