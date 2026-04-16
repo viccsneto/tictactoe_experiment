@@ -14,12 +14,23 @@ let state = createInitialState();
 let scores = loadScores();
 
 function loadScores() {
-  const saved = localStorage.getItem('tictactoe-scores');
-  return saved ? JSON.parse(saved) : { '🐱': 0, '🐶': 0 };
+  try {
+    const saved = localStorage.getItem('tictactoe-scores');
+    return saved ? JSON.parse(saved) : { '🐱': 0, '🐶': 0 };
+  } catch (e) {
+    console.warn('localStorage not available, using in-memory scores:', e);
+    alert('Pontuação não pode ser salva permanentemente. Os dados serão perdidos ao recarregar a página.');
+    return { '🐱': 0, '🐶': 0 };
+  }
 }
 
 function saveScores() {
-  localStorage.setItem('tictactoe-scores', JSON.stringify(scores));
+  try {
+    localStorage.setItem('tictactoe-scores', JSON.stringify(scores));
+  } catch (e) {
+    console.warn('Failed to save scores to localStorage:', e);
+    alert('Erro ao salvar pontuação. Os dados podem ser perdidos.');
+  }
 }
 
 function updateScoreDisplay() {

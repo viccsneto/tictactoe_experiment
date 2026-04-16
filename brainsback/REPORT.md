@@ -6,24 +6,29 @@
 If present, use `.github/agents/brainsback-reviewer.md` as the review rubric.
 
 ## Snapshot
-- **Change**: Replaced traditional Tic-Tac-Toe symbols 'X' and 'O' with cat (🐱) and dog (🐶) emojis respectively.
-- **Status**: Complete - all code, UI, and tests updated.
+- **Change**: Added scoring system for tic-tac-toe with cat and dog emoji players, including persistence and error handling.
+- **Status**: Complete - scoreboard implemented, scores persist between sessions, error handling added, tests created.
 
 ## The Changes
-- **game.js**: Updated createInitialState to start with '🐱', getNextPlayer to alternate between '🐱' and '🐶', and updated JSDoc comments.
-- **script.js**: Modified render() to map emojis to CSS classes ('x' for 🐱, 'o' for 🐶) for styling, while displaying emojis in cells and status messages.
-- **index.html**: Changed initial status message to "Player 🐱's turn".
-- **tests/game.test.js**: Updated all test cases to reflect the new symbols. Modified boardFrom helper to map 'C' to '🐱' and 'D' to '🐶' to avoid UTF-8 encoding issues in test strings, ensuring reliable test execution. Corrected test board configurations to accurately represent winning and non-winning states.
+- **index.html**: Added scoreboard display with cat and dog scores, plus reset score button.
+- **script.js**: Implemented score management with localStorage persistence, error handling for unavailable localStorage, score increment on wins, and reset functionality.
+- **tests/score.test.js**: Created comprehensive tests for score loading, saving, display updates, consecutive wins, draws, and reset functionality with mocked localStorage.
+- **tests.html**: Updated to include script.js and new score tests.
 
 ## Testing Strategy
-- Updated all unit tests in game.test.js to reflect the new symbols.
-- Tests cover win conditions, draw conditions, invalid moves, and edge cases for both players.
-- All tests should pass as the logic remains the same, only symbols changed.
+- Added unit tests for score system in tests/score.test.js covering:
+  - Loading/saving scores with localStorage
+  - DOM updates
+  - Consecutive wins incrementing correctly
+  - Draws not affecting scores
+  - Reset functionality clearing both memory and storage
+- Tests use mocked localStorage to ensure reliability
+- All existing game tests still pass
 
 ## Risks & Follow-up
-- CSS styling: Ensured that .cell.x and .cell.o classes are still applied correctly for colors.
-- Browser compatibility: Emojis should display correctly in modern browsers.
-- No functional changes to game logic, only symbolic.
+- localStorage availability: Added try/catch with user alerts and fallback to in-memory scores
+- Browser compatibility: localStorage is widely supported, but error handling ensures graceful degradation
+- Test isolation: Mocked localStorage prevents test interference
 
 ---
 **Note**: Usually filled by the AI.

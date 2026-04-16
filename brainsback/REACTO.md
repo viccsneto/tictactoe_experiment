@@ -5,38 +5,43 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## R — The Problem
-A missão foi de refatorar a lógica e a interface do clássica do Jogo da Velha, substituíndo os simbolos universais de 'X' e 'O' pelas strings de emojis gato (😺) e cachorro (🐶), garantindo que tatno a engine do jogo quanto os testes continuassem funcionando.
+Implementar um sistema de pontuação persistente para o jogo da velha com emojis, onde vitórias de 🐱 e 🐶 sejam contabilizadas, empates ignorados, e o placar sobreviva a recarregamentos de página, com tratamento robusto de erros para navegadores sem localStorage.
 
 ## E — Examples
 
-- **Input**: 
-O estado inicial do jogo começa
-  **Output**:
-A mensagem de status exibe "vez do gato"
-- **Input**:
-O jogador 😺 clica na célula central, seguido pelo jogador 🐶 clicando no canto superior esquerdo
-  **Output**:
-O tabuleiro registra ['😺', '🐶'] em suas respectivas posições e a interface renderiza os emojis cprrespondentes com as classes CSS corretas
+- **Input**: Jogador 🐱 vence uma partida
+  **Output**: Placar de 🐱 incrementa de 0 para 1, salvo em localStorage
+- **Input**: Partida termina em empate
+  **Output**: Nenhum placar é alterado
+- **Input**: localStorage indisponível (modo incógnito)
+  **Output**: Alerta ao usuário, placar mantido em memória até recarregar
+- **Input**: Usuário clica "Reset Score"
+  **Output**: Ambos placares zerados, localStorage limpo
+
 ## A — Approach
-A abordagem consistiu em três frentes:
-1. Atualizar a lógica de (game.js) para inicializar e alternar turnos usando emojis.
-2. Modificar o manipulador de renderização (script.js) para manter a estilização antiga.
-3. Atulaizar a base de testes.
+A abordagem foi dividir em camadas: UI para exibição, lógica para gerenciamento de estado, persistência para sobreviver sessões, e testes para validar comportamento. Usou localStorage com fallbacks para robustez.
+
 ## C — Code
-A troca dos símbolos exigiu alteração em três arquivos do projeto.
-- game.js: 
-   - crateInitialState: modificada para definir que o estado incial do jogo sempre comece com o jogador Gato
-
-  - getNextPlayer: atualizada para alternar corretamente a string do turno seguinte entre Gato e o Cachorro, garantindo o fluxo do jogo
-
-- script.js:
-  render(): Atualizada para exibir os caracteres de emoji, além disso, ela mapeia os emojis para as classes CSS originais, garantindo a estilização
-
-- tests/game.test.js (testes unitários)
-  - boardFrom: foi modificada para contornar possíveis erros de codificação.
+O sistema foi implementado em três arquivos principais:
+- index.html: Adicionou scoreboard com elementos DOM para exibir placares
+- script.js: 
+  - loadScores/saveScores: Gerenciam persistência com try/catch para localStorage
+  - updateScoreDisplay: Atualiza UI em tempo real
+  - Integração com handleClick para incrementar placar em vitórias
+  - resetScore: Zera placares e limpa armazenamento
+- tests/score.test.js: Testes unitários com mock de localStorage cobrindo cenários de vitórias consecutivas, empates, e reset
 
 ## T — Tests
-Após a implementação todos os testes passaram.
+Foram criados testes abrangentes que simulam:
+- Carregamento e salvamento de placares
+- Atualização da UI
+- Vitórias consecutivas de ambos jogadores
+- Empates não afetando placares
+- Reset limpando memória e armazenamento
+- Mock de localStorage para isolamento
 
 ## O — Optimization
-Não se aplica
+O sistema é eficiente: operações de localStorage são mínimas (apenas em vitórias e reset), UI atualiza apenas quando necessário, e tratamento de erro previne crashes. Poderia ser otimizado com debouncing se houvesse muitas operações, mas para este caso é adequado.
+
+---
+**Note**: This REACTO demonstrates understanding of state management, persistence, error handling, and testing in browser environments.

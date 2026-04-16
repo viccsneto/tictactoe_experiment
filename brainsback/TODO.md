@@ -5,21 +5,25 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## The Problem
-Você deve **substituir os símbolos tradicionais `X` e `O`** do jogo da velha por emojis: passará a ser 🐱 (cat face) e onde era `X`, onde era `O`, passará a ser 🐶 (dog face).
+Implementar um sistema de pontuação que contabilize e exiba as vitórias do Gato (🐱) e do Cachorro (🐶), com persistência entre sessões e tratamento de erros para localStorage indisponível.
 
 ## Steps
-- [X] modifique e atualize o arquivo com a lógica do jogo em `game.js`
-- [X] modifique e atualize a lógica por trás no arquivo `script.js`
-- [X] Atualize os testes de caso
-
+- [ ] Adicionar scoreboard visual no HTML
+- [ ] Implementar lógica de pontuação no script.js com localStorage
+- [ ] Adicionar tratamento de erro para localStorage
+- [ ] Criar testes para o sistema de pontuação
+- [ ] Atualizar REPORT.md e REACTO.md
 
 ## Success Looks Like
-- [X] Toda a lógica que utiliza o 'X' ou 'O' será alterada para ser 🐱 (cat face) e por 🐶 (dog face) respectivamente.
-- [X] O usuário veja apenas gato e cachorro e não 'X' e 'O'.
-- [X] All tests pass
+- [ ] Placar exibe vitórias de 🐱 e 🐶
+- [ ] Pontuação persiste entre sessões
+- [ ] Empates não pontuam
+- [ ] Tratamento de erro para localStorage
+- [ ] Testes cobrem vitórias consecutivas, empates e reset
 
 ## Notes
-- [X] Tudo que representa X ou O deve ser alterado para gato ou cachorro, inclusive o nome dos jogadores.
+- [ ] Reset apaga histórico persistido
+- [ ] Alertar usuário se localStorage falhar
 
 ---
 **⚠️ HUMAN ONLY**: This file is your strategic space. AI agents must not edit it.
