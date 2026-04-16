@@ -54,6 +54,16 @@ describe('Score System', () => {
     expect(result).toEqual({ '🐱': 3, '🐶': 2 });
   });
 
+  test('loadScores sanitizes invalid persisted score values', () => {
+    localStorage.setItem('tictactoe-scores', JSON.stringify({ '🐱': '5', '🐶': null, 'extra': 'ignored' }));
+    const result = loadScores();
+    expect(result).toEqual({ '🐱': 5, '🐶': 0 });
+
+    localStorage.setItem('tictactoe-scores', JSON.stringify({ '🐱': 'abc', '🐶': -2 }));
+    const sanitized = loadScores();
+    expect(sanitized).toEqual({ '🐱': 0, '🐶': 0 });
+  });
+
   test('saveScores persists scores to localStorage', () => {
     scores = { '🐱': 5, '🐶': 4 };
     saveScores();

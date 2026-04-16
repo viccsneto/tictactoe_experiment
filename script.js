@@ -13,10 +13,26 @@ const scoreDogEl = document.getElementById('score-dog');
 let state = createInitialState();
 let scores = loadScores();
 
+function normalizeScoreValue(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 0 ? number : 0;
+}
+
+function normalizeScores(raw) {
+  if (!raw || typeof raw !== 'object') {
+    return { '🐱': 0, '🐶': 0 };
+  }
+
+  return {
+    '🐱': normalizeScoreValue(raw['🐱']),
+    '🐶': normalizeScoreValue(raw['🐶']),
+  };
+}
+
 function loadScores() {
   try {
     const saved = localStorage.getItem('tictactoe-scores');
-    return saved ? JSON.parse(saved) : { '🐱': 0, '🐶': 0 };
+    return saved ? normalizeScores(JSON.parse(saved)) : { '🐱': 0, '🐶': 0 };
   } catch (e) {
     console.warn('localStorage not available, using in-memory scores:', e);
     alert('Pontuação não pode ser salva permanentemente. Os dados serão perdidos ao recarregar a página.');
