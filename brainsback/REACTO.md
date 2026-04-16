@@ -5,27 +5,38 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## R — The Problem
-_Repita_com_suas_palavras_qual_o_problema_sendo_resolvido_
+A missão foi de refatorar a lógica e a interface do clássica do Jogo da Velha, substituíndo os simbolos universais de 'X' e 'O' pelas strings de emojis gato (😺) e cachorro (🐶), garantindo que tatno a engine do jogo quanto os testes continuassem funcionando.
 
 ## E — Examples
-_Exemplos_de_entrada_saída_ou_situacao_e_resposta_
 
 - **Input**: 
-
+O estado inicial do jogo começa
   **Output**:
-
+A mensagem de status exibe "vez do gato"
 - **Input**:
-
+O jogador 😺 clica na célula central, seguido pelo jogador 🐶 clicando no canto superior esquerdo
   **Output**:
-
+O tabuleiro registra ['😺', '🐶'] em suas respectivas posições e a interface renderiza os emojis cprrespondentes com as classes CSS corretas
 ## A — Approach
-_Um_paragrafo_descrevendo_a_estrategia_para_a_solucao_do_problema_
-
+A abordagem consistiu em três frentes:
+1. Atualizar a lógica de (game.js) para inicializar e alternar turnos usando emojis.
+2. Modificar o manipulador de renderização (script.js) para manter a estilização antiga.
+3. Atulaizar a base de testes.
 ## C — Code
-_Liste_as_funcoes__onde_elas_foram_implementadas_e_de_onde_sao_chamadas_para_resolver_o_problema_
+A troca dos símbolos exigiu alteração em três arquivos do projeto.
+- game.js: 
+   - crateInitialState: modificada para definir que o estado incial do jogo sempre comece com o jogador Gato
+
+  - getNextPlayer: atualizada para alternar corretamente a string do turno seguinte entre Gato e o Cachorro, garantindo o fluxo do jogo
+
+- script.js:
+  render(): Atualizada para exibir os caracteres de emoji, além disso, ela mapeia os emojis para as classes CSS originais, garantindo a estilização
+
+- tests/game.test.js (testes unitários)
+  - boardFrom: foi modificada para contornar possíveis erros de codificação.
 
 ## T — Tests
-_Como_voce_testou_que_o_problema_foi_resolvido__informe_testes_manuais_e_automaticos_
+Após a implementação todos os testes passaram.
 
 ## O — Optimization
-_Analise_bigO__pode_nao_se_aplicar_em_alguns_casos_
+Não se aplica
