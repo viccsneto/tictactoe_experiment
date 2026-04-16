@@ -57,6 +57,39 @@ describe('createInitialState', () => {
 });
 
 // ---------------------------------------------------------------------------
+// score helpers
+// ---------------------------------------------------------------------------
+
+describe('createInitialScore', () => {
+  test('starts with zero points for both players', () => {
+    expect(createInitialScore()).toEqual({ X: 0, O: 0 });
+  });
+
+  test('returns a new object each call', () => {
+    const s1 = createInitialScore();
+    const s2 = createInitialScore();
+    expect(s1).not.toBe(s2);
+  });
+});
+
+describe('addWin', () => {
+  test('increments X score when X wins', () => {
+    const score = { X: 0, O: 0 };
+    expect(addWin(score, 'X')).toEqual({ X: 1, O: 0 });
+  });
+
+  test('increments O score when O wins', () => {
+    const score = { X: 3, O: 1 };
+    expect(addWin(score, 'O')).toEqual({ X: 3, O: 2 });
+  });
+
+  test('keeps score unchanged on draw winner', () => {
+    const score = { X: 2, O: 2 };
+    expect(addWin(score, null)).toBe(score);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // getNextPlayer
 // ---------------------------------------------------------------------------
 

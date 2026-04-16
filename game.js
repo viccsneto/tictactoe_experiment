@@ -23,6 +23,30 @@ function createInitialState() {
 }
 
 /**
+ * Returns the initial score state.
+ */
+function createInitialScore() {
+  return {
+    [PLAYER_X]: 0,
+    [PLAYER_O]: 0,
+  };
+}
+
+/**
+ * Returns a new score object with one win added for the winner.
+ * @param {{ X: number, O: number }} score
+ * @param {'X'|'O'|null} winner
+ * @returns {{ X: number, O: number }}
+ */
+function addWin(score, winner) {
+  if (winner !== PLAYER_X && winner !== PLAYER_O) return score;
+  return {
+    ...score,
+    [winner]: score[winner] + 1,
+  };
+}
+
+/**
  * Returns the next player given the current one.
  * @param {'X'|'O'} current
  * @returns {'X'|'O'}
@@ -85,8 +109,10 @@ if (typeof module !== 'undefined' && module.exports) {
     PLAYER_X_ICON,
     PLAYER_O_ICON,
     createInitialState,
+    createInitialScore,
     getNextPlayer,
     getPlayerIcon,
+    addWin,
     applyMove,
     checkWinner,
   };

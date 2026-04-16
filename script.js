@@ -6,8 +6,11 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const catScoreEl = document.getElementById('score-cat');
+const dogScoreEl = document.getElementById('score-dog');
 
 let state = createInitialState();
+let score = createInitialScore();
 
 function render() {
   cells.forEach((cell, i) => {
@@ -21,6 +24,11 @@ function render() {
 function setStatus(msg, cls = '') {
   status.textContent = msg;
   status.className   = 'status' + (cls ? ` ${cls}` : '');
+}
+
+function renderScore() {
+  if (catScoreEl) catScoreEl.textContent = String(score.X);
+  if (dogScoreEl) dogScoreEl.textContent = String(score.O);
 }
 
 function handleClick(e) {
@@ -40,6 +48,8 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      score = addWin(score, result.winner);
+      renderScore();
       result.combo.forEach(i => cells[i].classList.add('winning'));
       setStatus(`Player ${getPlayerIcon(result.winner)} wins!`, 'win');
     } else {
@@ -65,4 +75,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
+renderScore();
 setStatus(`Player ${getPlayerIcon(state.current)}'s turn`);

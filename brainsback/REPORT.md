@@ -6,7 +6,7 @@
 If present, use `.github/agents/brainsback-reviewer.md` as the review rubric.
 
 ## Snapshot
-- **Change**: Replaced visible X/O symbols with cat and dog emojis in the UI, while preserving game rules and turn logic.
+- **Change**: Added a win score system for cat (🐱) and dog (🐶), keeping score across rounds and displaying it in the main UI.
 - **Status**: Done
 
 ## The Changes
@@ -14,14 +14,22 @@ If present, use `.github/agents/brainsback-reviewer.md` as the review rubric.
 	- `PLAYER_X_ICON = '🐱'`
 	- `PLAYER_O_ICON = '🐶'`
 	- `getPlayerIcon(player)` helper to convert logical marks (`X`/`O`) into UI emojis.
+- [x] Added score helpers in `game.js`:
+	- `createInitialScore()` returns `{ X: 0, O: 0 }`
+	- `addWin(score, winner)` returns a new score with the winner incremented.
 - [x] Kept core board logic stable (`X`/`O` internally) to avoid regressions in winner detection and move validation.
 - [x] Updated UI rendering in `script.js`:
 	- Board cells now display emoji icons via `getPlayerIcon`.
 	- Status messages now show emoji icons for turn/winner text.
+	- Score is stored in memory and updated after each winning round.
+- [x] Updated `index.html` to display a scoreboard for:
+	- `🐱 Gato`
+	- `🐶 Cachorro`
 - [x] Updated initial static status text in `index.html` to `Player 🐱's turn`.
 - [x] Updated tests in `tests/game.test.js`:
 	- Added coverage for `getPlayerIcon('X') -> 🐱` and `getPlayerIcon('O') -> 🐶`.
 	- Added assertions for exported icon constants.
+	- Added coverage for score helpers (`createInitialScore`, `addWin`).
 
 ## Testing Strategy
 _How we ensured it works._
