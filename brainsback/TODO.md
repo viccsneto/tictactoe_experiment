@@ -5,18 +5,22 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## The Problem
-_One or two sentences on what we're solving._
+Trocar "X" por "emoji de cat face" e "O" por "emoji de dog face"
 
 ## Steps
-- [ ] 
-- [ ] 
-- [ ] Update the test cases
+- [Procura "X" em cada lugar do codigo do repositorio]
+- [Troca pelo "emoji de cat face"]
+- [Procura "O" em cada lugar do codigo do repositorio]
+- [Troca pelo "emoji de dog face"]
+- [X] Update the test cases
 
 
 ## Success Looks Like
-- [ ] 
-- [ ] 
-- [ ] All tests pass
+- [Não temos mais "X" na interface do jogo]
+- [Temos "emoji de cat face" onde antes tinha "X"]
+- [Não temos mais "O" na interface do jogo]
+- [Temos "emoji de dog face" onde antes tinha "O"]
+- [X] All tests pass
 
 ## Notes
 - [ ] 
