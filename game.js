@@ -14,6 +14,8 @@ function createInitialState() {
     board:   Array(9).fill(''),
     current: 'X',
     gameOver: false,
+    scoreX: 0,
+    scoreO: 0,
   };
 }
 

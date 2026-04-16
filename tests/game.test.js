@@ -49,6 +49,14 @@ describe('createInitialState', () => {
     expect(createInitialState().gameOver).toBe(false);
   });
 
+  test('scoreX starts at 0', () => {
+    expect(createInitialState().scoreX).toBe(0);
+  });
+
+  test('scoreO starts at 0', () => {
+    expect(createInitialState().scoreO).toBe(0);
+  });
+
   test('each call returns a distinct board array', () => {
     const s1 = createInitialState();
     const s2 = createInitialState();
