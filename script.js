@@ -9,9 +9,26 @@ const restartBtn     = document.getElementById('restart');
 
 let state = createInitialState();
 
+const PLAYER_VISUAL_MAP = {
+  X: '🐱',
+  O: '🐶',
+};
+
+function toVisualMarker(marker) {
+  return PLAYER_VISUAL_MAP[marker] || marker;
+}
+
+function formatTurnStatus(player) {
+  return `Player ${toVisualMarker(player)}'s turn`;
+}
+
+function formatWinnerStatus(player) {
+  return `Player ${toVisualMarker(player)} wins!`;
+}
+
 function render() {
   cells.forEach((cell, i) => {
-    cell.textContent = state.board[i];
+    cell.textContent = toVisualMarker(state.board[i]);
     cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
@@ -40,7 +57,7 @@ function handleClick(e) {
     state.gameOver = true;
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
-      setStatus(`Player ${result.winner} wins!`, 'win');
+      setStatus(formatWinnerStatus(result.winner), 'win');
     } else {
       setStatus("It's a draw!", 'draw');
     }
@@ -50,18 +67,28 @@ function handleClick(e) {
   }
 
   state.current = getNextPlayer(state.current);
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(formatTurnStatus(state.current));
 }
 
 function restartGame() {
   state = createInitialState();
   render();
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(formatTurnStatus(state.current));
 }
 
-cells.forEach(cell => cell.addEventListener('click', handleClick));
-restartBtn.addEventListener('click', restartGame);
+if (cells.length && status && restartBtn) {
+  cells.forEach(cell => cell.addEventListener('click', handleClick));
+  restartBtn.addEventListener('click', restartGame);
 
-// Initial render
-render();
-setStatus(`Player ${state.current}'s turn`);
+  // Initial render
+  render();
+  setStatus(formatTurnStatus(state.current));
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    toVisualMarker,
+    formatTurnStatus,
+    formatWinnerStatus,
+  };
+}
