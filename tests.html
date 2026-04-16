@@ -21,8 +21,37 @@
   <div id="results"></div>
   <div id="summary">Running tests...</div>
 
+  <div style="display:none" aria-hidden="true">
+    <div class="scoreboard">
+      <div class="score">
+        <span class="score-label x-color">🐱</span>
+        <span class="score-value" id="score-cat">0</span>
+      </div>
+      <div class="score">
+        <span class="score-label o-color">🐶</span>
+        <span class="score-value" id="score-dog">0</span>
+      </div>
+    </div>
+    <div id="status"></div>
+    <button id="restart"></button>
+    <div class="board">
+      <button class="cell" data-index="0"></button>
+      <button class="cell" data-index="1"></button>
+      <button class="cell" data-index="2"></button>
+      <button class="cell" data-index="3"></button>
+      <button class="cell" data-index="4"></button>
+      <button class="cell" data-index="5"></button>
+      <button class="cell" data-index="6"></button>
+      <button class="cell" data-index="7"></button>
+      <button class="cell" data-index="8"></button>
+    </div>
+  </div>
+
   <script src="tests/test-runner.js"></script>
   <script src="game.js"></script>
+  <script src="script.js"></script>
   <script src="tests/game.test.js"></script>
+  <script src="tests/ui-visual.test.js"></script>
+  <script src="tests/score.test.js"></script>
 </body>
 </html>
