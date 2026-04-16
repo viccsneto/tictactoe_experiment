@@ -3,16 +3,61 @@
 // WINNING_COMBOS, checkWinner, getNextPlayer, applyMove, createInitialState
 // are provided by game.js, loaded before this script.
 
-const cells    = document.querySelectorAll('.cell');
-const status   = document.getElementById('status');
-const restartBtn     = document.getElementById('restart');
+const cells      = document.querySelectorAll('.cell');
+const status     = document.getElementById('status');
+const restartBtn = document.getElementById('restart');
+const resetScoreBtn = document.getElementById('reset-score');
+const scoreCatEl = document.getElementById('score-cat');
+const scoreDogEl = document.getElementById('score-dog');
 
 let state = createInitialState();
+let scores = loadScores();
+
+function normalizeScoreValue(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number >= 0 ? number : 0;
+}
+
+function normalizeScores(raw) {
+  if (!raw || typeof raw !== 'object') {
+    return { '🐱': 0, '🐶': 0 };
+  }
+
+  return {
+    '🐱': normalizeScoreValue(raw['🐱']),
+    '🐶': normalizeScoreValue(raw['🐶']),
+  };
+}
+
+function loadScores() {
+  try {
+    const saved = localStorage.getItem('tictactoe-scores');
+    return saved ? normalizeScores(JSON.parse(saved)) : { '🐱': 0, '🐶': 0 };
+  } catch (e) {
+    console.warn('localStorage not available, using in-memory scores:', e);
+    alert('Pontuação não pode ser salva permanentemente. Os dados serão perdidos ao recarregar a página.');
+    return { '🐱': 0, '🐶': 0 };
+  }
+}
+
+function saveScores() {
+  try {
+    localStorage.setItem('tictactoe-scores', JSON.stringify(scores));
+  } catch (e) {
+    console.warn('Failed to save scores to localStorage:', e);
+    alert('Erro ao salvar pontuação. Os dados podem ser perdidos.');
+  }
+}
+
+function updateScoreDisplay() {
+  scoreCatEl.textContent = scores['🐱'];
+  scoreDogEl.textContent = scores['🐶'];
+}
 
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i] === '🐱' ? 'x' : 'o'}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
 }
@@ -40,6 +85,9 @@ function handleClick(e) {
     state.gameOver = true;
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
+      scores[result.winner]++;
+      saveScores();
+      updateScoreDisplay();
       setStatus(`Player ${result.winner} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
@@ -59,9 +107,17 @@ function restartGame() {
   setStatus(`Player ${state.current}'s turn`);
 }
 
+function resetScore() {
+  scores = { '🐱': 0, '🐶': 0 };
+  saveScores();
+  updateScoreDisplay();
+}
+
 cells.forEach(cell => cell.addEventListener('click', handleClick));
 restartBtn.addEventListener('click', restartGame);
+resetScoreBtn.addEventListener('click', resetScore);
 
 // Initial render
 render();
+updateScoreDisplay();
 setStatus(`Player ${state.current}'s turn`);
