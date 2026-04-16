@@ -314,3 +314,84 @@ describe('checkWinner — result shape', () => {
   });
 });
 
+// ---------------------------------------------------------------------------
+// Score Management
+// ---------------------------------------------------------------------------
+
+describe('createScoreState', () => {
+  test('returns an object with both players at 0', () => {
+    const score = createScoreState();
+    expect(getScore(score, CAT)).toBe(0);
+    expect(getScore(score, DOG)).toBe(0);
+  });
+
+  test('each call returns a distinct object', () => {
+    const s1 = createScoreState();
+    const s2 = createScoreState();
+    expect(s1).not.toBe(s2);
+  });
+});
+
+describe('incrementScore', () => {
+  test('increments cat score', () => {
+    const score = createScoreState();
+    const updated = incrementScore(score, CAT);
+    expect(getScore(updated, CAT)).toBe(1);
+    expect(getScore(updated, DOG)).toBe(0);
+  });
+
+  test('increments dog score', () => {
+    const score = createScoreState();
+    const updated = incrementScore(score, DOG);
+    expect(getScore(updated, CAT)).toBe(0);
+    expect(getScore(updated, DOG)).toBe(1);
+  });
+
+  test('does not mutate the original score object', () => {
+    const score = createScoreState();
+    const updated = incrementScore(score, CAT);
+    expect(getScore(score, CAT)).toBe(0);
+    expect(getScore(updated, CAT)).toBe(1);
+  });
+
+  test('increments score correctly over multiple calls', () => {
+    let score = createScoreState();
+    score = incrementScore(score, CAT);
+    score = incrementScore(score, CAT);
+    score = incrementScore(score, DOG);
+    expect(getScore(score, CAT)).toBe(2);
+    expect(getScore(score, DOG)).toBe(1);
+  });
+
+  test('handles invalid player gracefully', () => {
+    const score = createScoreState();
+    const updated = incrementScore(score, 'INVALID');
+    expect(getScore(updated, CAT)).toBe(0);
+    expect(getScore(updated, DOG)).toBe(0);
+  });
+});
+
+describe('getScore', () => {
+  test('returns 0 for cat when no games played', () => {
+    const score = createScoreState();
+    expect(getScore(score, CAT)).toBe(0);
+  });
+
+  test('returns 0 for dog when no games played', () => {
+    const score = createScoreState();
+    expect(getScore(score, DOG)).toBe(0);
+  });
+
+  test('returns correct score after increments', () => {
+    let score = createScoreState();
+    score = incrementScore(score, CAT);
+    score = incrementScore(score, CAT);
+    expect(getScore(score, CAT)).toBe(2);
+  });
+
+  test('returns 0 for invalid player', () => {
+    const score = createScoreState();
+    expect(getScore(score, 'INVALID')).toBe(0);
+  });
+});
+

@@ -63,6 +63,40 @@ function checkWinner(board) {
   return null;
 }
 
+/**
+ * Returns an initial score object with both players at 0.
+ */
+function createScoreState() {
+  return {
+    [PLAYER_CAT]: 0,
+    [PLAYER_DOG]: 0,
+  };
+}
+
+/**
+ * Increments the score for the given player.
+ * @param {object} score Current score object
+ * @param {string} player Player symbol (PLAYER_CAT or PLAYER_DOG)
+ * @returns {object} New score object with incremented value
+ */
+function incrementScore(score, player) {
+  const newScore = { ...score };
+  if (player === PLAYER_CAT || player === PLAYER_DOG) {
+    newScore[player] = (newScore[player] || 0) + 1;
+  }
+  return newScore;
+}
+
+/**
+ * Gets the current score for a player.
+ * @param {object} score Current score object
+ * @param {string} player Player symbol (PLAYER_CAT or PLAYER_DOG)
+ * @returns {number} Score value for the player
+ */
+function getScore(score, player) {
+  return score[player] || 0;
+}
+
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
@@ -73,5 +107,8 @@ if (typeof module !== 'undefined' && module.exports) {
     getNextPlayer,
     applyMove,
     checkWinner,
+    createScoreState,
+    incrementScore,
+    getScore,
   };
 }
