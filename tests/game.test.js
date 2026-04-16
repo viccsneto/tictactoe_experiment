@@ -305,3 +305,16 @@ describe('checkWinner — result shape', () => {
     });
   });
 });
+
+describe('symbol representation contract', () => {
+  test('engine still starts with internal player mark X', () => {
+    expect(createInitialState().current).toBe('X');
+  });
+
+  test('winner remains internal mark, not UI emoji', () => {
+    const b = Array(9).fill('');
+    b[0] = 'X'; b[1] = 'X'; b[2] = 'X';
+    const result = checkWinner(b);
+    expect(result.winner).toBe('X');
+  });
+});
