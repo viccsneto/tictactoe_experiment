@@ -7,6 +7,14 @@ const WINNING_COMBOS = [
 ];
 
 /**
+ * Maps internal player tokens to their visual display symbols.
+ */
+const PLAYER_SYMBOLS = {
+  'X': '🐱',
+  'O': '🐶',
+};
+
+/**
  * Returns the initial game state.
  */
 function createInitialState() {
@@ -15,6 +23,23 @@ function createInitialState() {
     current: 'X',
     gameOver: false,
   };
+}
+
+/**
+ * Returns the initial scores state.
+ */
+function createInitialScores() {
+  return { X: 0, O: 0 };
+}
+
+/**
+ * Returns updated scores after a win.
+ * @param {{ X: number, O: number }} scores
+ * @param {'X'|'O'} winner
+ * @returns {{ X: number, O: number }}
+ */
+function updateScore(scores, winner) {
+  return { ...scores, [winner]: scores[winner] + 1 };
 }
 
 /**
@@ -62,5 +87,5 @@ function checkWinner(board) {
 
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
+  module.exports = { WINNING_COMBOS, PLAYER_SYMBOLS, createInitialState, createInitialScores, updateScore, getNextPlayer, applyMove, checkWinner };
 }
