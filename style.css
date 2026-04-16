@@ -16,14 +16,27 @@ body {
 
 .container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
+  align-items: flex-start;
+  gap: 40px;
   padding: 32px 24px;
   background: #16213e;
   border-radius: 20px;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
-  width: min(420px, 95vw);
+  width: min(600px, 95vw);
+}
+
+.game-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  flex: 1;
+}
+
+.scoreboard-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
@@ -35,7 +48,8 @@ h1 {
 /* Scoreboard */
 .scoreboard {
   display: flex;
-  gap: 24px;
+  flex-direction: column;
+  gap: 12px;
   width: 100%;
   justify-content: center;
 }

@@ -12,25 +12,27 @@ const WINNING_COMBOS = [
 function createInitialState() {
   return {
     board:   Array(9).fill(''),
-    current: 'X',
+    current: '🐱',
     gameOver: false,
+    catWins: 0,
+    dogWins: 0,
   };
 }
 
 /**
  * Returns the next player given the current one.
- * @param {'X'|'O'} current
- * @returns {'X'|'O'}
+ * @param {'🐱'|'🐶'} current
+ * @returns {'🐱'|'🐶'}
  */
 function getNextPlayer(current) {
-  return current === 'X' ? 'O' : 'X';
+  return current === '🐱' ? '🐶' : '🐱';
 }
 
 /**
  * Returns a new board with the move applied, or null if the move is invalid.
  * @param {string[]} board
  * @param {number}   index  0-8
- * @param {'X'|'O'} player
+ * @param {'🐱'|'🐶'} player
  * @returns {string[]|null}
  */
 function applyMove(board, index, player) {
@@ -60,7 +62,20 @@ function checkWinner(board) {
   return null;
 }
 
+/**
+ * Updates the win counters in the state.
+ * @param {object} state
+ * @param {string} winner '🐱' or '🐶'
+ */
+function updateWins(state, winner) {
+  if (winner === '🐱') {
+    state.catWins++;
+  } else if (winner === '🐶') {
+    state.dogWins++;
+  }
+}
+
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
+  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner, updateWins };
 }
