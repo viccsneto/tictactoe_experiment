@@ -6,20 +6,39 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const scoreBoard = document.getElementById('score');
 
 let state = createInitialState();
+let catScore = 0;
+let dogScore = 0;
 
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
-    cell.disabled    = state.board[i] !== '' || state.gameOver;
+    // Map symbols to class names for styling
+    const classMap = { '🐱': 'cat', '🐶': 'dog' };
+    const symbolClass = state.board[i] ? classMap[state.board[i]] : '';
+    cell.className = 'cell' + (symbolClass ? ` ${symbolClass}` : '');
+    cell.disabled = state.board[i] !== '' || state.gameOver;
   });
 }
 
 function setStatus(msg, cls = '') {
   status.textContent = msg;
-  status.className   = 'status' + (cls ? ` ${cls}` : '');
+  status.className = 'status' + (cls ? ` ${cls}` : '');
+}
+
+function updateScore(winner) {
+    if (winner === '🐱') {
+        catScore++;
+    } else if (winner === '🐶') {
+        dogScore++;
+    }
+    renderScore();
+}
+
+function renderScore() {
+    scoreBoard.textContent = `Gato: ${catScore} - Cachorro: ${dogScore}`;
 }
 
 function handleClick(e) {
@@ -39,6 +58,7 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      updateScore(result.winner);
       result.combo.forEach(i => cells[i].classList.add('winning'));
       setStatus(`Player ${result.winner} wins!`, 'win');
     } else {
@@ -64,4 +84,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
+renderScore();
 setStatus(`Player ${state.current}'s turn`);
