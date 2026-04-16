@@ -3,11 +3,29 @@
 // WINNING_COMBOS, checkWinner, getNextPlayer, applyMove, createInitialState
 // are provided by game.js, loaded before this script.
 
-const cells    = document.querySelectorAll('.cell');
-const status   = document.getElementById('status');
-const restartBtn     = document.getElementById('restart');
+const cells      = document.querySelectorAll('.cell');
+const status     = document.getElementById('status');
+const restartBtn = document.getElementById('restart');
+const resetScoreBtn = document.getElementById('reset-score');
+const scoreCatEl = document.getElementById('score-cat');
+const scoreDogEl = document.getElementById('score-dog');
 
 let state = createInitialState();
+let scores = loadScores();
+
+function loadScores() {
+  const saved = localStorage.getItem('tictactoe-scores');
+  return saved ? JSON.parse(saved) : { '🐱': 0, '🐶': 0 };
+}
+
+function saveScores() {
+  localStorage.setItem('tictactoe-scores', JSON.stringify(scores));
+}
+
+function updateScoreDisplay() {
+  scoreCatEl.textContent = scores['🐱'];
+  scoreDogEl.textContent = scores['🐶'];
+}
 
 function render() {
   cells.forEach((cell, i) => {
@@ -40,6 +58,9 @@ function handleClick(e) {
     state.gameOver = true;
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
+      scores[result.winner]++;
+      saveScores();
+      updateScoreDisplay();
       setStatus(`Player ${result.winner} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
@@ -59,9 +80,17 @@ function restartGame() {
   setStatus(`Player ${state.current}'s turn`);
 }
 
+function resetScore() {
+  scores = { '🐱': 0, '🐶': 0 };
+  saveScores();
+  updateScoreDisplay();
+}
+
 cells.forEach(cell => cell.addEventListener('click', handleClick));
 restartBtn.addEventListener('click', restartGame);
+resetScoreBtn.addEventListener('click', resetScore);
 
 // Initial render
 render();
+updateScoreDisplay();
 setStatus(`Player ${state.current}'s turn`);
