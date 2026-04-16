@@ -5,27 +5,48 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## R — The Problem
-_Repita_com_suas_palavras_qual_o_problema_sendo_resolvido_
+El problema es cambiar los simbolos del juego de TicTacToe por emojis. El X siendo `🐱` y el O siendo `🐶`
 
 ## E — Examples
 _Exemplos_de_entrada_saída_ou_situacao_e_resposta_
 
-- **Input**: 
+- **Input**: Click en una casilla vacia durante el turno de `🐱` y no de una formula ganadora
 
-  **Output**:
+  **Output**: La casilla se llena con `🐱` y pasa el turno al jugador `🐶`
 
-- **Input**:
+  - **Input**: Click en una casilla vacia durante el turno de `🐶` y no de una formula ganadora
 
-  **Output**:
+  **Output**: La casilla se llena con `🐶` y pasa el turno al jugador `🐱`
+
+- **Input**: Click en una casilla vacia durante el turno de `🐱` y en una casilla que de una formula ganadora
+
+  **Output**: Player `🐱` wins!
+
+  **Input**: Click en una casilla vacia durante el turno de `🐶` y en una casilla que de una formula ganadora
+
+  **Output**: Player `🐶` wins! 
+
+- **Input**: Click en la ultima casilla vacia durante el turno de `🐱` y en una casilla que de una formula ganadora
+
+  **Output**: It's a draw!
 
 ## A — Approach
-_Um_paragrafo_descrevendo_a_estrategia_para_a_solucao_do_problema_
+Se creo un diccionario para asociar la X a `🐱` y O a `🐶` y una funcion para mostrar estos emojis para solo agregar la implementacion a las funciones que ya existian en `script.js`, para modificar la presentacion visual. Asi no se modifica la logica interna del juego (`game.js`).
+
 
 ## C — Code
-_Liste_as_funcoes__onde_elas_foram_implementadas_e_de_onde_sao_chamadas_para_resolver_o_problema_
+- El unico archivo modificad fue `script.js`
+- La funcion principal (y unica) creada fue displaySymbol(symbol), y un diccionario SYMBOLS.
+- Todas las funciones son llamadas de `script.js`.
+- Y fueron implementadas en render(), handleClick(e), restartGame()
+- Es llamada al final en setStatus() para mostrar texto
 
 ## T — Tests
-_Como_voce_testou_que_o_problema_foi_resolvido__informe_testes_manuais_e_automaticos_
+- Pase los test automaticos
+- Hice manuelmente :
+  - una ronda de empate,
+  - una donde `🐱` gane y
+  - otra donde `🐶` gane.
 
 ## O — Optimization
-_Analise_bigO__pode_nao_se_aplicar_em_alguns_casos_
+Creo que est´a bastante optimizado porque no altera el comportamiento interno, solo se llama una funcion que lee un diccionario bastante simple.
