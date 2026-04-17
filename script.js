@@ -3,6 +3,10 @@
 // WINNING_COMBOS, checkWinner, getNextPlayer, applyMove, createInitialState
 // are provided by game.js, loaded before this script.
 
+function getPlayerClass(player) {
+  return player === '🐱' ? 'x' : 'o';
+}
+
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
@@ -12,7 +16,7 @@ let state = createInitialState();
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    cell.className   = 'cell' + (state.board[i] ? ` ${getPlayerClass(state.board[i])}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
 }
