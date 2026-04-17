@@ -6,13 +6,17 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const catScoreEl = document.getElementById('score-cat');
+const dogScoreEl = document.getElementById('score-dog');
 
 let state = createInitialState();
+let score = createInitialScore();
 
 function render() {
   cells.forEach((cell, i) => {
-    cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    const mark = state.board[i];
+    cell.textContent = mark ? getPlayerIcon(mark) : '';
+    cell.className   = 'cell' + (mark ? ` ${mark.toLowerCase()}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
 }
@@ -20,6 +24,11 @@ function render() {
 function setStatus(msg, cls = '') {
   status.textContent = msg;
   status.className   = 'status' + (cls ? ` ${cls}` : '');
+}
+
+function renderScore() {
+  if (catScoreEl) catScoreEl.textContent = String(score.X);
+  if (dogScoreEl) dogScoreEl.textContent = String(score.O);
 }
 
 function handleClick(e) {
@@ -39,8 +48,10 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      score = addWin(score, result.winner);
+      renderScore();
       result.combo.forEach(i => cells[i].classList.add('winning'));
-      setStatus(`Player ${result.winner} wins!`, 'win');
+      setStatus(`Player ${getPlayerIcon(result.winner)} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
     }
@@ -50,13 +61,13 @@ function handleClick(e) {
   }
 
   state.current = getNextPlayer(state.current);
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${getPlayerIcon(state.current)}'s turn`);
 }
 
 function restartGame() {
   state = createInitialState();
   render();
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${getPlayerIcon(state.current)}'s turn`);
 }
 
 cells.forEach(cell => cell.addEventListener('click', handleClick));
@@ -64,4 +75,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
-setStatus(`Player ${state.current}'s turn`);
+renderScore();
+setStatus(`Player ${getPlayerIcon(state.current)}'s turn`);
