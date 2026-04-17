@@ -3,18 +3,31 @@
 // WINNING_COMBOS, checkWinner, getNextPlayer, applyMove, createInitialState
 // are provided by game.js, loaded before this script.
 
+const PLAYER_CLASS = {
+  '🐱': 'x',
+  '🐶': 'o',
+};
+
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const scoresDiv = document.getElementById('scores');
 
 let state = createInitialState();
 
 function render() {
   cells.forEach((cell, i) => {
-    cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    const mark = state.board[i];
+    cell.textContent = mark;
+    const markClass = mark && PLAYER_CLASS[mark] ? ` ${PLAYER_CLASS[mark]}` : '';
+    cell.className   = 'cell' + markClass;
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
+  renderScores();
+}
+
+function renderScores() {
+  scoresDiv.textContent = `🐱: ${state.scores['🐱']} | 🐶: ${state.scores['🐶']}`;
 }
 
 function setStatus(msg, cls = '') {
@@ -38,6 +51,7 @@ function handleClick(e) {
 
   if (result) {
     state.gameOver = true;
+    updateScores(state, result.winner);
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
       setStatus(`Player ${result.winner} wins!`, 'win');
@@ -54,7 +68,9 @@ function handleClick(e) {
 }
 
 function restartGame() {
+  const currentScores = state.scores;
   state = createInitialState();
+  state.scores = currentScores;
   render();
   setStatus(`Player ${state.current}'s turn`);
 }

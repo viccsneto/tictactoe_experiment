@@ -5,27 +5,26 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## R — The Problem
-_Repita_com_suas_palavras_qual_o_problema_sendo_resolvido_
+O problema era alterar os símbolos de 'X' e 'O' para '🐱' e '🐶' no jogo da velha.
 
 ## E — Examples
-_Exemplos_de_entrada_saída_ou_situacao_e_resposta_
 
-- **Input**: 
+- **Input**: Jogo é iniciado
 
-  **Output**:
+  **Output**: O jogador da vez é o '🐱'
 
-- **Input**:
+- **Input**: O jogador '🐱' fez uma jogada
 
-  **Output**:
+  **Output**: Agora é a vez do jogador '🐶'
 
 ## A — Approach
-_Um_paragrafo_descrevendo_a_estrategia_para_a_solucao_do_problema_
+Comecei visualizando em quais arquivos/funções o 'X' e o 'O' eram usados para poder pedir ao copilot para alterá-los sem perder a lógica, após isso montei um passo a passo do que deveria ser feito, depois disso todas as chamadas para 'X' e 'O' foram alteradas para '🐱' e '🐶' e por fim foram feitos testes para verificar se está tudo funcionando como antes.
 
 ## C — Code
-_Liste_as_funcoes__onde_elas_foram_implementadas_e_de_onde_sao_chamadas_para_resolver_o_problema_
+Foram alterados os arquivos game.js (createInitialState e getNextPlayer), script.js (render e setStatus) e algumas funções do game.test.js onde teve a substituição dos símbolos.
 
 ## T — Tests
-_Como_voce_testou_que_o_problema_foi_resolvido__informe_testes_manuais_e_automaticos_
+Fiz os testes através da opção que é dada na interface e através do copilot, onde a cada implementação ele fazia testes para verificar se não quebrou nada.
 
 ## O — Optimization
-_Analise_bigO__pode_nao_se_aplicar_em_alguns_casos_
+Não se aplica nesse caso.
