@@ -5,18 +5,19 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## The Problem
-_One or two sentences on what we're solving._
+O jogo da velha atualmente utiliza o X e O como simbolos para os jogadores, porém é preciso substituir por emojis, onde X vira 🐱 e O vira 🐶.
+
 
 ## Steps
-- [ ] 
-- [ ] 
-- [ ] Update the test cases
+- [X] Identificar onde X e O são definidos e renderizados no código
+- [X] Substituir os símbolos pelos emojis correspondentes
+- [X] Update the test cases
 
 
 ## Success Looks Like
-- [ ] 
-- [ ] 
-- [ ] All tests pass
+- [X] O tabuleiro exibe 🐱 e 🐶 no lugar de X e O 
+- [X] As mensagens de vitória/empate refletem os emojis
+- [X] All tests pass
 
 ## Notes
 - [ ] 
