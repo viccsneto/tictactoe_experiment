@@ -11,9 +11,10 @@ const WINNING_COMBOS = [
  */
 function createInitialState() {
   return {
-    board:   Array(9).fill(''),
-    current: 'X',
+    board:    Array(9).fill(''),
+    current:  'X',
     gameOver: false,
+    scores:   { X: 0, O: 0 },
   };
 }
 
