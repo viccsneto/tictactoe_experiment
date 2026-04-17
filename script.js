@@ -3,18 +3,44 @@
 // WINNING_COMBOS, checkWinner, getNextPlayer, applyMove, createInitialState
 // are provided by game.js, loaded before this script.
 
-const cells    = document.querySelectorAll('.cell');
-const status   = document.getElementById('status');
-const restartBtn     = document.getElementById('restart');
+const cells     = document.querySelectorAll('.cell');
+const status    = document.getElementById('status');
+const restartBtn = document.getElementById('restart');
+const scoreCat  = document.getElementById('score-cat');
+const scoreDog  = document.getElementById('score-dog');
+
+const ICONS = {
+  X: '🐱',
+  O: '🐶'
+};
+
+const PLAYER_NAMES = {
+  X: 'Cat',
+  O: 'Dog'
+};
+
+function getIcon(player) {
+  return ICONS[player] || '';
+}
+
+function getPlayerName(player) {
+  return PLAYER_NAMES[player] || player;
+}
+
+function updateScoreboard() {
+  scoreCat.textContent = state.scores.X;
+  scoreDog.textContent = state.scores.O;
+}
 
 let state = createInitialState();
 
 function render() {
   cells.forEach((cell, i) => {
-    cell.textContent = state.board[i];
+    cell.textContent = getIcon(state.board[i]);
     cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
+  updateScoreboard();
 }
 
 function setStatus(msg, cls = '') {
@@ -39,8 +65,10 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      state.scores[result.winner] += 1;
       result.combo.forEach(i => cells[i].classList.add('winning'));
-      setStatus(`Player ${result.winner} wins!`, 'win');
+      updateScoreboard();
+      setStatus(`${getPlayerName(result.winner)} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
     }
@@ -50,13 +78,14 @@ function handleClick(e) {
   }
 
   state.current = getNextPlayer(state.current);
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`${getPlayerName(state.current)}'s turn`);
 }
 
 function restartGame() {
-  state = createInitialState();
+  const scores = state.scores;
+  state = { ...createInitialState(), scores };
   render();
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`${getPlayerName(state.current)}'s turn`);
 }
 
 cells.forEach(cell => cell.addEventListener('click', handleClick));
@@ -64,4 +93,4 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
-setStatus(`Player ${state.current}'s turn`);
+setStatus(`${getPlayerName(state.current)}'s turn`);

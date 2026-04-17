@@ -49,6 +49,12 @@ describe('createInitialState', () => {
     expect(createInitialState().gameOver).toBe(false);
   });
 
+  test('initial scores are zero for both players', () => {
+    const state = createInitialState();
+    expect(state.scores.X).toBe(0);
+    expect(state.scores.O).toBe(0);
+  });
+
   test('each call returns a distinct board array', () => {
     const s1 = createInitialState();
     const s2 = createInitialState();
