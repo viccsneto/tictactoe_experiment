@@ -71,24 +71,6 @@ describe('getNextPlayer', () => {
 });
 
 // ---------------------------------------------------------------------------
-// getDisplaySymbol
-// ---------------------------------------------------------------------------
-
-describe('getDisplaySymbol', () => {
-  test('X is displayed as cat emoji', () => {
-    expect(getDisplaySymbol('X')).toBe('🐱');
-  });
-
-  test('O is displayed as dog emoji', () => {
-    expect(getDisplaySymbol('O')).toBe('🐶');
-  });
-
-  test('empty cell stays empty', () => {
-    expect(getDisplaySymbol('')).toBe('');
-  });
-});
-
-// ---------------------------------------------------------------------------
 // applyMove
 // ---------------------------------------------------------------------------
 

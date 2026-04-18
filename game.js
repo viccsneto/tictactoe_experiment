@@ -6,11 +6,6 @@ const WINNING_COMBOS = [
   [0, 4, 8], [2, 4, 6],            // diagonals
 ];
 
-const DISPLAY_SYMBOLS = {
-  X: '🐱',
-  O: '🐶',
-};
-
 /**
  * Returns the initial game state.
  */
@@ -29,15 +24,6 @@ function createInitialState() {
  */
 function getNextPlayer(current) {
   return current === 'X' ? 'O' : 'X';
-}
-
-/**
- * Maps an internal player mark to the symbol shown in the UI.
- * @param {'X'|'O'|string} mark
- * @returns {string}
- */
-function getDisplaySymbol(mark) {
-  return DISPLAY_SYMBOLS[mark] || mark;
 }
 
 /**
@@ -76,13 +62,5 @@ function checkWinner(board) {
 
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    WINNING_COMBOS,
-    DISPLAY_SYMBOLS,
-    createInitialState,
-    getNextPlayer,
-    getDisplaySymbol,
-    applyMove,
-    checkWinner,
-  };
+  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
 }

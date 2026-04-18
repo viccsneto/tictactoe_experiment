@@ -30,8 +30,8 @@ Departamento de Informática, PUC-Rio
 ### Declaração de Consentimento
 
 - **Matrícula:** 
-  2310397
+  SUBSTITUIR_POR_SUA_MATRICULA
   **Nome completo:**
-  João Marcelo de Onofre Fontes Teixeira
+  SUBSTITUIR_POR_SEU_NOME
 - **Você consente com a coleta e o uso dos seus dados anonimizados para esta pesquisa?** 
-  Sim
+  [Sim / Não]
