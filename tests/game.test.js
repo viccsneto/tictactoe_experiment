@@ -71,6 +71,97 @@ describe('getNextPlayer', () => {
 });
 
 // ---------------------------------------------------------------------------
+// getDisplaySymbol
+// ---------------------------------------------------------------------------
+
+describe('getDisplaySymbol', () => {
+  test('X is displayed as cat emoji', () => {
+    expect(getDisplaySymbol('X')).toBe('🐱');
+  });
+
+  test('O is displayed as dog emoji', () => {
+    expect(getDisplaySymbol('O')).toBe('🐶');
+  });
+
+  test('empty cell stays empty', () => {
+    expect(getDisplaySymbol('')).toBe('');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// scoreboard helpers
+// ---------------------------------------------------------------------------
+
+describe('scoreboard helpers', () => {
+  test('createInitialScore starts both players at zero', () => {
+    expect(createInitialScore()).toEqual({ X: 0, O: 0 });
+  });
+
+  test('applyWinToScore increments only the winner', () => {
+    const next = applyWinToScore({ X: 1, O: 2 }, 'X');
+    expect(next).toEqual({ X: 2, O: 2 });
+  });
+
+  test('applyWinToScore does not mutate the original score object', () => {
+    const score = { X: 3, O: 4 };
+    applyWinToScore(score, 'O');
+    expect(score).toEqual({ X: 3, O: 4 });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// scoreboard integration
+// ---------------------------------------------------------------------------
+
+describe('scoreboard integration', () => {
+  test('initial score is shown as 0-0', () => {
+    expect(document.getElementById('score-x').textContent).toBe('0');
+    expect(document.getElementById('score-o').textContent).toBe('0');
+  });
+
+  test('a cat win increments only the cat score', () => {
+    const cells = document.querySelectorAll('.cell');
+    cells[0].click();
+    cells[3].click();
+    cells[1].click();
+    cells[4].click();
+    cells[2].click();
+
+    expect(document.getElementById('score-x').textContent).toBe('1');
+    expect(document.getElementById('score-o').textContent).toBe('0');
+    expect(document.getElementById('status').textContent).toBe('Player 🐱 wins!');
+  });
+
+  test('New Game keeps the score after a win', () => {
+    document.getElementById('restart').click();
+
+    expect(document.getElementById('score-x').textContent).toBe('1');
+    expect(document.getElementById('score-o').textContent).toBe('0');
+    expect(document.getElementById('status').textContent).toBe("Player 🐱's turn");
+  });
+
+  test('a draw does not change the score', () => {
+    const startX = document.getElementById('score-x').textContent;
+    const startO = document.getElementById('score-o').textContent;
+    const cells = document.querySelectorAll('.cell');
+
+    cells[0].click();
+    cells[1].click();
+    cells[3].click();
+    cells[4].click();
+    cells[2].click();
+    cells[5].click();
+    cells[7].click();
+    cells[6].click();
+    cells[8].click();
+
+    expect(document.getElementById('score-x').textContent).toBe(startX);
+    expect(document.getElementById('score-o').textContent).toBe(startO);
+    expect(document.getElementById('status').textContent).toBe("It's a draw!");
+  });
+});
+
+// ---------------------------------------------------------------------------
 // applyMove
 // ---------------------------------------------------------------------------
 

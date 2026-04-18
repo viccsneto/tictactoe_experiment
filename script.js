@@ -5,13 +5,21 @@
 
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
+const scoreX   = document.getElementById('score-x');
+const scoreO   = document.getElementById('score-o');
 const restartBtn     = document.getElementById('restart');
 
 let state = createInitialState();
+let score = createInitialScore();
+
+function renderScore() {
+  scoreX.textContent = score.X;
+  scoreO.textContent = score.O;
+}
 
 function render() {
   cells.forEach((cell, i) => {
-    cell.textContent = state.board[i];
+    cell.textContent = getDisplaySymbol(state.board[i]);
     cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
@@ -39,8 +47,10 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      score = applyWinToScore(score, result.winner);
+      renderScore();
       result.combo.forEach(i => cells[i].classList.add('winning'));
-      setStatus(`Player ${result.winner} wins!`, 'win');
+      setStatus(`Player ${getDisplaySymbol(result.winner)} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
     }
@@ -50,13 +60,13 @@ function handleClick(e) {
   }
 
   state.current = getNextPlayer(state.current);
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${getDisplaySymbol(state.current)}'s turn`);
 }
 
 function restartGame() {
   state = createInitialState();
   render();
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${getDisplaySymbol(state.current)}'s turn`);
 }
 
 cells.forEach(cell => cell.addEventListener('click', handleClick));
@@ -64,4 +74,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
-setStatus(`Player ${state.current}'s turn`);
+renderScore();
+setStatus(`Player ${getDisplaySymbol(state.current)}'s turn`);

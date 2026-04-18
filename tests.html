@@ -14,15 +14,44 @@
     #summary { margin-top: 20px; border-top: 1px solid #555; padding-top: 10px; font-size: 1.2em; }
     .summary-passed { color: #4CAF50; font-weight: bold; }
     .summary-failed { color: #f44336; font-weight: bold; }
+    .test-game { display: none; }
   </style>
 </head>
 <body>
   <h1>Game Tests</h1>
+  <div class="test-game">
+    <div class="status" id="status">Player 🐱's turn</div>
+    <div class="scoreboard" id="scoreboard">
+      <div class="score">
+        <span class="score-label x-color">🐱</span>
+        <span class="score-value" id="score-x">0</span>
+      </div>
+      <div class="score">
+        <span class="score-label o-color">🐶</span>
+        <span class="score-value" id="score-o">0</span>
+      </div>
+    </div>
+    <div class="board" id="board">
+      <button class="cell" data-index="0"></button>
+      <button class="cell" data-index="1"></button>
+      <button class="cell" data-index="2"></button>
+      <button class="cell" data-index="3"></button>
+      <button class="cell" data-index="4"></button>
+      <button class="cell" data-index="5"></button>
+      <button class="cell" data-index="6"></button>
+      <button class="cell" data-index="7"></button>
+      <button class="cell" data-index="8"></button>
+    </div>
+    <div class="actions">
+      <button class="btn" id="restart">New Game</button>
+    </div>
+  </div>
   <div id="results"></div>
   <div id="summary">Running tests...</div>
 
   <script src="tests/test-runner.js"></script>
   <script src="game.js"></script>
+  <script src="script.js"></script>
   <script src="tests/game.test.js"></script>
 </body>
 </html>
