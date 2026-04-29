@@ -60,7 +60,11 @@ function checkWinner(board) {
   return null;
 }
 
+function displayMark(mark) {
+  return mark === 'X' ? '😺' : mark === 'O' ? '🐶' : '';
+}
+
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
+  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner, displayMark };
 }

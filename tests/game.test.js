@@ -70,6 +70,21 @@ describe('getNextPlayer', () => {
   });
 });
 
+describe('displayMark', () => {
+  test('returns a cat face for X', () => {
+    expect(displayMark('X')).toBe('😺');
+  });
+
+  test('returns a dog face for O', () => {
+    expect(displayMark('O')).toBe('🐶');
+  });
+
+  test('returns an empty string for unknown marks', () => {
+    expect(displayMark('')).toBe('');
+    expect(displayMark('Z')).toBe('');
+  });
+});
+
 // ---------------------------------------------------------------------------
 // applyMove
 // ---------------------------------------------------------------------------
