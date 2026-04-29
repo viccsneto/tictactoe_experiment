@@ -4,9 +4,14 @@
 // Helpers
 // ---------------------------------------------------------------------------
 
-/** Build a board from a 9-char string (' ', 'X', 'O'). */
+/** Build a board from a 9-char token string (' ', 'X', 'O'). */
 function boardFrom(str) {
-  return str.split('').map(c => (c === ' ' ? '' : c));
+  return str.split('').map(c => {
+    if (c === ' ') return '';
+    if (c === 'X') return CAT_FACE;
+    if (c === 'O') return DOG_FACE;
+    return c;
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -41,8 +46,8 @@ describe('createInitialState', () => {
     expect(board.every(c => c === '')).toBe(true);
   });
 
-  test('first player is X', () => {
-    expect(createInitialState().current).toBe('X');
+  test('first player is cat face', () => {
+    expect(createInitialState().current).toBe(CAT_FACE);
   });
 
   test('gameOver is false', () => {
@@ -57,16 +62,45 @@ describe('createInitialState', () => {
 });
 
 // ---------------------------------------------------------------------------
+// createInitialScore / updateScore
+// ---------------------------------------------------------------------------
+
+describe('scoreboard helpers', () => {
+  test('createInitialScore starts both players at zero', () => {
+    expect(createInitialScore()).toEqual({ cat: 0, dog: 0 });
+  });
+
+  test('updateScore increments cat wins only', () => {
+    const score = createInitialScore();
+    const next = updateScore(score, CAT_FACE);
+    expect(next).toEqual({ cat: 1, dog: 0 });
+    expect(score).toEqual({ cat: 0, dog: 0 });
+  });
+
+  test('updateScore increments dog wins only', () => {
+    const score = createInitialScore();
+    const next = updateScore(score, DOG_FACE);
+    expect(next).toEqual({ cat: 0, dog: 1 });
+  });
+
+  test('updateScore ignores draws', () => {
+    const score = createInitialScore();
+    const next = updateScore(score, null);
+    expect(next).toEqual({ cat: 0, dog: 0 });
+  });
+});
+
+// ---------------------------------------------------------------------------
 // getNextPlayer
 // ---------------------------------------------------------------------------
 
 describe('getNextPlayer', () => {
-  test('X -> O', () => {
-    expect(getNextPlayer('X')).toBe('O');
+  test('cat face -> dog face', () => {
+    expect(getNextPlayer(CAT_FACE)).toBe(DOG_FACE);
   });
 
-  test('O -> X', () => {
-    expect(getNextPlayer('O')).toBe('X');
+  test('dog face -> cat face', () => {
+    expect(getNextPlayer(DOG_FACE)).toBe(CAT_FACE);
   });
 });
 
@@ -77,32 +111,32 @@ describe('getNextPlayer', () => {
 describe('applyMove', () => {
   test('places the player mark on the correct cell', () => {
     const board = Array(9).fill('');
-    const next = applyMove(board, 4, 'X');
-    expect(next[4]).toBe('X');
+    const next = applyMove(board, 4, CAT_FACE);
+    expect(next[4]).toBe(CAT_FACE);
   });
 
   test('does not mutate the original board', () => {
     const board = Array(9).fill('');
-    applyMove(board, 0, 'X');
+    applyMove(board, 0, CAT_FACE);
     expect(board[0]).toBe('');
   });
 
   test('returns null when cell is already occupied', () => {
     const board = boardFrom('X        ');
-    expect(applyMove(board, 0, 'O')).toBeNull();
+    expect(applyMove(board, 0, DOG_FACE)).toBeNull();
   });
 
   test('returns null for index below 0', () => {
-    expect(applyMove(Array(9).fill(''), -1, 'X')).toBeNull();
+    expect(applyMove(Array(9).fill(''), -1, CAT_FACE)).toBeNull();
   });
 
   test('returns null for index above 8', () => {
-    expect(applyMove(Array(9).fill(''), 9, 'X')).toBeNull();
+    expect(applyMove(Array(9).fill(''), 9, CAT_FACE)).toBeNull();
   });
 
   test('all other cells remain unchanged', () => {
     const board = Array(9).fill('');
-    const next = applyMove(board, 3, 'O');
+    const next = applyMove(board, 3, DOG_FACE);
     next.forEach((cell, i) => {
       if (i !== 3) expect(cell).toBe('');
     });
@@ -132,12 +166,12 @@ describe('checkWinner — in-progress games return null', () => {
   });
 });
 
-describe('checkWinner — X wins', () => {
+describe('checkWinner — cat wins', () => {
   test('top row', () => {
     const board = boardFrom('XXXOO    ');
     const result = checkWinner(board);
     expect(result).not.toBeNull();
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe(CAT_FACE);
     expect(result.combo).toEqual([0, 1, 2]);
   });
 
@@ -147,7 +181,7 @@ describe('checkWinner — X wins', () => {
     //   O      <- 6-8
     const board = boardFrom(' O XXXO  ');
     const result = checkWinner(board);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe(CAT_FACE);
     expect(result.combo).toEqual([3, 4, 5]);
   });
 
@@ -158,75 +192,75 @@ describe('checkWinner — X wins', () => {
     // 'OO OOXXX ' -> O O ' ' O O X X X ' '
     // Actually let me fix this properly
     const b = Array(9).fill('');
-    b[6] = 'X'; b[7] = 'X'; b[8] = 'X';
-    b[0] = 'O'; b[1] = 'O'; b[3] = 'O';
+    b[6] = CAT_FACE; b[7] = CAT_FACE; b[8] = CAT_FACE;
+    b[0] = DOG_FACE; b[1] = DOG_FACE; b[3] = DOG_FACE;
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe(CAT_FACE);
     expect(result.combo).toEqual([6, 7, 8]);
   });
 
   test('left column', () => {
     const b = Array(9).fill('');
-    b[0] = 'X'; b[3] = 'X'; b[6] = 'X';
-    b[1] = 'O'; b[4] = 'O';
+    b[0] = CAT_FACE; b[3] = CAT_FACE; b[6] = CAT_FACE;
+    b[1] = DOG_FACE; b[4] = DOG_FACE;
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe(CAT_FACE);
     expect(result.combo).toEqual([0, 3, 6]);
   });
 
   test('middle column', () => {
     const b = Array(9).fill('');
-    b[1] = 'X'; b[4] = 'X'; b[7] = 'X';
-    b[0] = 'O'; b[3] = 'O';
+    b[1] = CAT_FACE; b[4] = CAT_FACE; b[7] = CAT_FACE;
+    b[0] = DOG_FACE; b[3] = DOG_FACE;
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe(CAT_FACE);
     expect(result.combo).toEqual([1, 4, 7]);
   });
 
   test('right column', () => {
     const b = Array(9).fill('');
-    b[2] = 'X'; b[5] = 'X'; b[8] = 'X';
-    b[0] = 'O'; b[1] = 'O';
+    b[2] = CAT_FACE; b[5] = CAT_FACE; b[8] = CAT_FACE;
+    b[0] = DOG_FACE; b[1] = DOG_FACE;
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe(CAT_FACE);
     expect(result.combo).toEqual([2, 5, 8]);
   });
 
   test('main diagonal (top-left to bottom-right)', () => {
     const b = Array(9).fill('');
-    b[0] = 'X'; b[4] = 'X'; b[8] = 'X';
-    b[1] = 'O'; b[2] = 'O';
+    b[0] = CAT_FACE; b[4] = CAT_FACE; b[8] = CAT_FACE;
+    b[1] = DOG_FACE; b[2] = DOG_FACE;
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe(CAT_FACE);
     expect(result.combo).toEqual([0, 4, 8]);
   });
 
   test('anti-diagonal (top-right to bottom-left)', () => {
     const b = Array(9).fill('');
-    b[2] = 'X'; b[4] = 'X'; b[6] = 'X';
-    b[0] = 'O'; b[1] = 'O';
+    b[2] = CAT_FACE; b[4] = CAT_FACE; b[6] = CAT_FACE;
+    b[0] = DOG_FACE; b[1] = DOG_FACE;
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe(CAT_FACE);
     expect(result.combo).toEqual([2, 4, 6]);
   });
 });
 
-describe('checkWinner — O wins', () => {
+describe('checkWinner — dog wins', () => {
   test('top row', () => {
     const b = Array(9).fill('');
-    b[0] = 'O'; b[1] = 'O'; b[2] = 'O';
-    b[3] = 'X'; b[4] = 'X';
+    b[0] = DOG_FACE; b[1] = DOG_FACE; b[2] = DOG_FACE;
+    b[3] = CAT_FACE; b[4] = CAT_FACE;
     const result = checkWinner(b);
-    expect(result.winner).toBe('O');
+    expect(result.winner).toBe(DOG_FACE);
     expect(result.combo).toEqual([0, 1, 2]);
   });
 
   test('left column', () => {
     const b = Array(9).fill('');
-    b[0] = 'O'; b[3] = 'O'; b[6] = 'O';
-    b[1] = 'X'; b[4] = 'X';
+    b[0] = DOG_FACE; b[3] = DOG_FACE; b[6] = DOG_FACE;
+    b[1] = CAT_FACE; b[4] = CAT_FACE;
     const result = checkWinner(b);
-    expect(result.winner).toBe('O');
+    expect(result.winner).toBe(DOG_FACE);
     expect(result.combo).toEqual([0, 3, 6]);
   });
 });
@@ -288,7 +322,7 @@ describe('checkWinner — draw', () => {
 describe('checkWinner — result shape', () => {
   test('winning result has winner string and combo array', () => {
     const b = Array(9).fill('');
-    b[0] = 'X'; b[1] = 'X'; b[2] = 'X';
+    b[0] = CAT_FACE; b[1] = CAT_FACE; b[2] = CAT_FACE;
     const result = checkWinner(b);
     expect(typeof result.winner).toBe('string');
     expect(Array.isArray(result.combo)).toBe(true);
@@ -297,7 +331,7 @@ describe('checkWinner — result shape', () => {
 
   test('combo indices are valid board positions', () => {
     const b = Array(9).fill('');
-    b[0] = 'O'; b[1] = 'O'; b[2] = 'O';
+    b[0] = DOG_FACE; b[1] = DOG_FACE; b[2] = DOG_FACE;
     const { combo } = checkWinner(b);
     combo.forEach(i => {
       expect(i).toBeGreaterThanOrEqual(0);

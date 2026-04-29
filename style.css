@@ -35,41 +35,42 @@ h1 {
 /* Scoreboard */
 .scoreboard {
   display: flex;
-  gap: 24px;
+  gap: 16px;
   width: 100%;
   justify-content: center;
 }
 
-.score {
+.score-card {
+  min-width: 120px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: #0f3460;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #0f3460;
-  border-radius: 12px;
-  padding: 12px 28px;
   gap: 4px;
-  min-width: 80px;
+}
+
+.score-card.cat {
+  box-shadow: inset 0 0 0 1px rgba(249, 115, 22, 0.25);
+}
+
+.score-card.dog {
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.22);
 }
 
 .score-label {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #94a3b8;
-}
-
-.score-label.x-color {
-  color: #f97316;
-}
-
-.score-label.o-color {
-  color: #38bdf8;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: #cbd5e1;
 }
 
 .score-value {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #e2e8f0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f8fafc;
 }
 
 /* Status */
@@ -125,11 +126,11 @@ h1 {
   cursor: default;
 }
 
-.cell.x {
+.cell.cat {
   color: #f97316;
 }
 
-.cell.o {
+.cell.dog {
   color: #38bdf8;
 }
 
