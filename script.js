@@ -6,15 +6,26 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const catScoreEl = document.getElementById('cat-score');
+const dogScoreEl = document.getElementById('dog-score');
 
 let state = createInitialState();
+let scores = {
+  '😺': 0,
+  '🐶': 0
+};
 
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i]}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
+}
+
+function updateScoreDisplay() {
+  catScoreEl.textContent = scores['😺'];
+  dogScoreEl.textContent = scores['🐶'];
 }
 
 function setStatus(msg, cls = '') {
@@ -40,6 +51,8 @@ function handleClick(e) {
     state.gameOver = true;
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
+      scores[result.winner]++;
+      updateScoreDisplay();
       setStatus(`Player ${result.winner} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
@@ -64,4 +77,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
+updateScoreDisplay();
 setStatus(`Player ${state.current}'s turn`);
