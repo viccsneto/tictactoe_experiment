@@ -4,9 +4,14 @@
 // Helpers
 // ---------------------------------------------------------------------------
 
-/** Build a board from a 9-char string (' ', 'X', 'O'). */
+/** Build a board from a 9-char string (' ', 'X', 'O'). Maps X->😺 and O->🐶 */
 function boardFrom(str) {
-  return str.split('').map(c => (c === ' ' ? '' : c));
+  return str.split('').map(c => {
+    if (c === ' ') return '';
+    if (c === 'X') return '😺';
+    if (c === 'O') return '🐶';
+    return c;
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -41,12 +46,14 @@ describe('createInitialState', () => {
     expect(board.every(c => c === '')).toBe(true);
   });
 
-  test('first player is X', () => {
-    expect(createInitialState().current).toBe('X');
+  test('first player is 😺', () => {
+    expect(createInitialState().current).toBe('😺');
   });
 
-  test('gameOver is false', () => {
-    expect(createInitialState().gameOver).toBe(false);
+  test('initial scores are zero', () => {
+    const state = createInitialState();
+    expect(state.catScore).toBe(0);
+    expect(state.dogScore).toBe(0);
   });
 
   test('each call returns a distinct board array', () => {
@@ -57,16 +64,57 @@ describe('createInitialState', () => {
 });
 
 // ---------------------------------------------------------------------------
+// updateScore
+// ---------------------------------------------------------------------------
+
+describe('updateScore', () => {
+  test('increments cat score when cat wins', () => {
+    const state = createInitialState();
+    const newState = updateScore(state, '😺');
+    expect(newState.catScore).toBe(1);
+    expect(newState.dogScore).toBe(0);
+  });
+
+  test('increments dog score when dog wins', () => {
+    const state = createInitialState();
+    const newState = updateScore(state, '🐶');
+    expect(newState.catScore).toBe(0);
+    expect(newState.dogScore).toBe(1);
+  });
+
+  test('does not change scores on draw', () => {
+    const state = createInitialState();
+    const newState = updateScore(state, null);
+    expect(newState.catScore).toBe(0);
+    expect(newState.dogScore).toBe(0);
+  });
+
+  test('preserves existing scores when updating', () => {
+    const state = { ...createInitialState(), catScore: 2, dogScore: 3 };
+    const newState = updateScore(state, '😺');
+    expect(newState.catScore).toBe(3);
+    expect(newState.dogScore).toBe(3);
+  });
+
+  test('does not mutate original state', () => {
+    const state = createInitialState();
+    updateScore(state, '😺');
+    expect(state.catScore).toBe(0);
+    expect(state.dogScore).toBe(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // getNextPlayer
 // ---------------------------------------------------------------------------
 
 describe('getNextPlayer', () => {
-  test('X -> O', () => {
-    expect(getNextPlayer('X')).toBe('O');
+  test('😺 -> 🐶', () => {
+    expect(getNextPlayer('😺')).toBe('🐶');
   });
 
-  test('O -> X', () => {
-    expect(getNextPlayer('O')).toBe('X');
+  test('🐶 -> 😺', () => {
+    expect(getNextPlayer('🐶')).toBe('😺');
   });
 });
 
@@ -77,32 +125,32 @@ describe('getNextPlayer', () => {
 describe('applyMove', () => {
   test('places the player mark on the correct cell', () => {
     const board = Array(9).fill('');
-    const next = applyMove(board, 4, 'X');
-    expect(next[4]).toBe('X');
+    const next = applyMove(board, 4, '😺');
+    expect(next[4]).toBe('😺');
   });
 
   test('does not mutate the original board', () => {
     const board = Array(9).fill('');
-    applyMove(board, 0, 'X');
+    applyMove(board, 0, '😺');
     expect(board[0]).toBe('');
   });
 
   test('returns null when cell is already occupied', () => {
-    const board = boardFrom('X        ');
-    expect(applyMove(board, 0, 'O')).toBeNull();
+    const board = boardFrom('😺        ');
+    expect(applyMove(board, 0, '🐶')).toBeNull();
   });
 
   test('returns null for index below 0', () => {
-    expect(applyMove(Array(9).fill(''), -1, 'X')).toBeNull();
+    expect(applyMove(Array(9).fill(''), -1, '😺')).toBeNull();
   });
 
   test('returns null for index above 8', () => {
-    expect(applyMove(Array(9).fill(''), 9, 'X')).toBeNull();
+    expect(applyMove(Array(9).fill(''), 9, '😺')).toBeNull();
   });
 
   test('all other cells remain unchanged', () => {
     const board = Array(9).fill('');
-    const next = applyMove(board, 3, 'O');
+    const next = applyMove(board, 3, '🐶');
     next.forEach((cell, i) => {
       if (i !== 3) expect(cell).toBe('');
     });
@@ -132,12 +180,12 @@ describe('checkWinner — in-progress games return null', () => {
   });
 });
 
-describe('checkWinner — X wins', () => {
+describe('checkWinner — 😺 wins', () => {
   test('top row', () => {
     const board = boardFrom('XXXOO    ');
     const result = checkWinner(board);
     expect(result).not.toBeNull();
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe('😺');
     expect(result.combo).toEqual([0, 1, 2]);
   });
 
@@ -147,7 +195,7 @@ describe('checkWinner — X wins', () => {
     //   O      <- 6-8
     const board = boardFrom(' O XXXO  ');
     const result = checkWinner(board);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe('😺');
     expect(result.combo).toEqual([3, 4, 5]);
   });
 
@@ -158,60 +206,60 @@ describe('checkWinner — X wins', () => {
     // 'OO OOXXX ' -> O O ' ' O O X X X ' '
     // Actually let me fix this properly
     const b = Array(9).fill('');
-    b[6] = 'X'; b[7] = 'X'; b[8] = 'X';
-    b[0] = 'O'; b[1] = 'O'; b[3] = 'O';
+    b[6] = '😺'; b[7] = '😺'; b[8] = '😺';
+    b[0] = '🐶'; b[1] = '🐶'; b[3] = '🐶';
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe('😺');
     expect(result.combo).toEqual([6, 7, 8]);
   });
 
   test('left column', () => {
     const b = Array(9).fill('');
-    b[0] = 'X'; b[3] = 'X'; b[6] = 'X';
-    b[1] = 'O'; b[4] = 'O';
+    b[0] = '😺'; b[3] = '😺'; b[6] = '😺';
+    b[1] = '🐶'; b[4] = '🐶';
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe('😺');
     expect(result.combo).toEqual([0, 3, 6]);
   });
 
   test('middle column', () => {
     const b = Array(9).fill('');
-    b[1] = 'X'; b[4] = 'X'; b[7] = 'X';
-    b[0] = 'O'; b[3] = 'O';
+    b[1] = '😺'; b[4] = '😺'; b[7] = '😺';
+    b[0] = '🐶'; b[3] = '🐶';
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe('😺');
     expect(result.combo).toEqual([1, 4, 7]);
   });
 
   test('right column', () => {
     const b = Array(9).fill('');
-    b[2] = 'X'; b[5] = 'X'; b[8] = 'X';
-    b[0] = 'O'; b[1] = 'O';
+    b[2] = '😺'; b[5] = '😺'; b[8] = '😺';
+    b[0] = '🐶'; b[1] = '🐶';
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe('😺');
     expect(result.combo).toEqual([2, 5, 8]);
   });
 
   test('main diagonal (top-left to bottom-right)', () => {
     const b = Array(9).fill('');
-    b[0] = 'X'; b[4] = 'X'; b[8] = 'X';
-    b[1] = 'O'; b[2] = 'O';
+    b[0] = '😺'; b[4] = '😺'; b[8] = '😺';
+    b[1] = '🐶'; b[2] = '🐶';
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe('😺');
     expect(result.combo).toEqual([0, 4, 8]);
   });
 
   test('anti-diagonal (top-right to bottom-left)', () => {
     const b = Array(9).fill('');
-    b[2] = 'X'; b[4] = 'X'; b[6] = 'X';
-    b[0] = 'O'; b[1] = 'O';
+    b[2] = '😺'; b[4] = '😺'; b[6] = '😺';
+    b[0] = '🐶'; b[1] = '🐶';
     const result = checkWinner(b);
-    expect(result.winner).toBe('X');
+    expect(result.winner).toBe('😺');
     expect(result.combo).toEqual([2, 4, 6]);
   });
 });
 
-describe('checkWinner — O wins', () => {
+describe('checkWinner — 🐶 wins', () => {
   test('top row', () => {
     const b = Array(9).fill('');
     b[0] = 'O'; b[1] = 'O'; b[2] = 'O';
@@ -288,7 +336,7 @@ describe('checkWinner — draw', () => {
 describe('checkWinner — result shape', () => {
   test('winning result has winner string and combo array', () => {
     const b = Array(9).fill('');
-    b[0] = 'X'; b[1] = 'X'; b[2] = 'X';
+    b[0] = '😺'; b[1] = '😺'; b[2] = '😺';
     const result = checkWinner(b);
     expect(typeof result.winner).toBe('string');
     expect(Array.isArray(result.combo)).toBe(true);
@@ -297,7 +345,7 @@ describe('checkWinner — result shape', () => {
 
   test('combo indices are valid board positions', () => {
     const b = Array(9).fill('');
-    b[0] = 'O'; b[1] = 'O'; b[2] = 'O';
+    b[0] = '🐶'; b[1] = '🐶'; b[2] = '🐶';
     const { combo } = checkWinner(b);
     combo.forEach(i => {
       expect(i).toBeGreaterThanOrEqual(0);

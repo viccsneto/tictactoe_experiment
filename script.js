@@ -1,20 +1,30 @@
 'use strict';
 
-// WINNING_COMBOS, checkWinner, getNextPlayer, applyMove, createInitialState
+// WINNING_COMBOS, checkWinner, getNextPlayer, applyMove, createInitialState, updateScore
 // are provided by game.js, loaded before this script.
 
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const catScore = document.getElementById('cat-score');
+const dogScore = document.getElementById('dog-score');
+const resetScoresBtn = document.getElementById('reset-scores');
 
 let state = createInitialState();
 
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    let cssClass = 'cell';
+    if (state.board[i] === '😺') cssClass += ' x';
+    else if (state.board[i] === '🐶') cssClass += ' o';
+    cell.className   = cssClass;
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
+
+  // Update scoreboard
+  catScore.textContent = state.catScore;
+  dogScore.textContent = state.dogScore;
 }
 
 function setStatus(msg, cls = '') {
@@ -39,6 +49,10 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      // Update score
+      state = updateScore(state, result.winner);
+      render(); // Re-render to update scoreboard
+
       result.combo.forEach(i => cells[i].classList.add('winning'));
       setStatus(`Player ${result.winner} wins!`, 'win');
     } else {
@@ -54,13 +68,27 @@ function handleClick(e) {
 }
 
 function restartGame() {
+  // Preserve current scores when starting a new game
+  const currentCatScore = state.catScore;
+  const currentDogScore = state.dogScore;
+  
   state = createInitialState();
+  state.catScore = currentCatScore;
+  state.dogScore = currentDogScore;
+  
   render();
   setStatus(`Player ${state.current}'s turn`);
 }
 
+function resetScores() {
+  state.catScore = 0;
+  state.dogScore = 0;
+  render();
+}
+
 cells.forEach(cell => cell.addEventListener('click', handleClick));
 restartBtn.addEventListener('click', restartGame);
+resetScoresBtn.addEventListener('click', resetScores);
 
 // Initial render
 render();

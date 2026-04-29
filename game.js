@@ -12,25 +12,27 @@ const WINNING_COMBOS = [
 function createInitialState() {
   return {
     board:   Array(9).fill(''),
-    current: 'X',
+    current: '😺',
     gameOver: false,
+    catScore: 0,
+    dogScore: 0,
   };
 }
 
 /**
  * Returns the next player given the current one.
- * @param {'X'|'O'} current
- * @returns {'X'|'O'}
+ * @param {'😺'|'🐶'} current
+ * @returns {'😺'|'🐶'}
  */
 function getNextPlayer(current) {
-  return current === 'X' ? 'O' : 'X';
+  return current === '😺' ? '🐶' : '😺';
 }
 
 /**
  * Returns a new board with the move applied, or null if the move is invalid.
  * @param {string[]} board
  * @param {number}   index  0-8
- * @param {'X'|'O'} player
+ * @param {'😺'|'🐶'} player
  * @returns {string[]|null}
  */
 function applyMove(board, index, player) {
@@ -45,7 +47,7 @@ function applyMove(board, index, player) {
  * Checks the board for a winner or draw.
  * @param {string[]} board
  * @returns {{ winner: string, combo: number[] }|{ winner: null, combo: [] }|null}
- *   - Object with winner ('X'|'O') and winning combo indices if someone won.
+ *   - Object with winner ('😺'|'🐶') and winning combo indices if someone won.
  *   - Object with winner null and empty combo if the board is full (draw).
  *   - null if the game is still in progress.
  */
@@ -60,7 +62,23 @@ function checkWinner(board) {
   return null;
 }
 
+/**
+ * Updates the score based on the winner.
+ * @param {object} state - Current game state
+ * @param {string|null} winner - Winner ('😺', '🐶', or null for draw)
+ * @returns {object} Updated state with new scores
+ */
+function updateScore(state, winner) {
+  const newState = { ...state };
+  if (winner === '😺') {
+    newState.catScore = state.catScore + 1;
+  } else if (winner === '🐶') {
+    newState.dogScore = state.dogScore + 1;
+  }
+  return newState;
+}
+
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
+  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner, updateScore };
 }
