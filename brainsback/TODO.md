@@ -8,7 +8,7 @@
 _One or two sentences on what we're solving._
 
 ## Steps
-- [ ] 
+- [ Change the X field in tictactoe game and change that for a cat emoji] 
 - [ ] 
 - [ ] Update the test cases
 
