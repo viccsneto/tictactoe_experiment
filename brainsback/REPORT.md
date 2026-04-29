@@ -6,17 +6,19 @@
 If present, use `.github/agents/brainsback-reviewer.md` as the review rubric.
 
 ## Snapshot
-- **Change**: 
-- **Status**: 
+- **Change**: Render cat/dog emojis for players and add UI tests
+- **Status**: Done
 
 ## The Changes
-- [ ] 
+- [x] Mapped X/O to 🐱/🐶 in UI rendering and status messages
+- [x] Updated initial status text in the main HTML
+- [x] Added UI emoji rendering tests in the browser test runner
 
 ## Testing Strategy
-_How we ensured it works._
+- Browser tests in tests.html cover initial status and first two moves
 
 ## Risks & Follow-up
-- [ ] 
+- [ ] None noted
 
 ---
 **Note**: Usually filled by the AI.

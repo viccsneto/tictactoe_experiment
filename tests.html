@@ -21,8 +21,102 @@
   <div id="results"></div>
   <div id="summary">Running tests...</div>
 
+  <div id="test-fixture" style="display: none;">
+    <div class="status" id="status">Player 🐱's turn</div>
+    <div class="scoreboard" id="scoreboard">
+      <div class="score">
+        <div class="score-label x-color">🐱</div>
+        <div class="score-value" id="score-x">0</div>
+      </div>
+      <div class="score">
+        <div class="score-label o-color">🐶</div>
+        <div class="score-value" id="score-o">0</div>
+      </div>
+    </div>
+    <div class="board" id="board">
+      <button class="cell" data-index="0"></button>
+      <button class="cell" data-index="1"></button>
+      <button class="cell" data-index="2"></button>
+      <button class="cell" data-index="3"></button>
+      <button class="cell" data-index="4"></button>
+      <button class="cell" data-index="5"></button>
+      <button class="cell" data-index="6"></button>
+      <button class="cell" data-index="7"></button>
+      <button class="cell" data-index="8"></button>
+    </div>
+    <div class="actions">
+      <button class="btn" id="restart">New Game</button>
+    </div>
+  </div>
+
   <script src="tests/test-runner.js"></script>
   <script src="game.js"></script>
   <script src="tests/game.test.js"></script>
+  <script src="script.js"></script>
+  <script>
+    describe('UI emoji rendering', () => {
+      test('initial status uses cat emoji', () => {
+        const status = document.getElementById('status');
+        expect(status.textContent).toBe("Player 🐱's turn");
+      });
+
+      test('first move renders cat and switches to dog', () => {
+        document.getElementById('restart').click();
+        const first = document.querySelector('.cell[data-index="0"]');
+        first.click();
+        const status = document.getElementById('status');
+        expect(first.textContent).toBe('🐱');
+        expect(status.textContent).toBe("Player 🐶's turn");
+      });
+
+      test('second move renders dog and switches to cat', () => {
+        document.getElementById('restart').click();
+        const first = document.querySelector('.cell[data-index="0"]');
+        const second = document.querySelector('.cell[data-index="1"]');
+        first.click();
+        second.click();
+        const status = document.getElementById('status');
+        expect(second.textContent).toBe('🐶');
+        expect(status.textContent).toBe("Player 🐱's turn");
+      });
+    });
+
+    describe('Scoreboard', () => {
+      const clickCell = index => {
+        const cell = document.querySelector(`.cell[data-index="${index}"]`);
+        cell.click();
+      };
+
+      test('starts at 0 - 0', () => {
+        expect(document.getElementById('score-x').textContent).toBe('0');
+        expect(document.getElementById('score-o').textContent).toBe('0');
+      });
+
+      test('cat score increments on cat win', () => {
+        document.getElementById('restart').click();
+        // X wins: 0,1,2
+        clickCell(0); // X
+        clickCell(3); // O
+        clickCell(1); // X
+        clickCell(4); // O
+        clickCell(2); // X
+        expect(document.getElementById('score-x').textContent).toBe('1');
+        expect(document.getElementById('score-o').textContent).toBe('0');
+      });
+
+      test('dog score increments and persists across restart', () => {
+        document.getElementById('restart').click();
+        // O wins: 3,4,5
+        clickCell(0); // X
+        clickCell(3); // O
+        clickCell(1); // X
+        clickCell(4); // O
+        clickCell(8); // X
+        clickCell(5); // O
+        expect(document.getElementById('score-x').textContent).toBe('1');
+        expect(document.getElementById('score-o').textContent).toBe('1');
+      });
+    });
+  </script>
 </body>
 </html>
