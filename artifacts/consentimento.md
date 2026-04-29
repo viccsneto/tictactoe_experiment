@@ -30,8 +30,8 @@ Departamento de Informática, PUC-Rio
 ### Declaração de Consentimento
 
 - **Matrícula:** 
-  SUBSTITUIR_POR_SUA_MATRICULA
+  N/A
   **Nome completo:**
-  SUBSTITUIR_POR_SEU_NOME
+  Anderson Jose Silva de Oliveira
 - **Você consente com a coleta e o uso dos seus dados anonimizados para esta pesquisa?** 
-  [Sim / Não]
+  Sim
