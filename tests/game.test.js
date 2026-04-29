@@ -85,6 +85,25 @@ describe('displayMark', () => {
   });
 });
 
+describe('score helpers', () => {
+  test('creates a zeroed score state', () => {
+    expect(createScoreState()).toEqual({ X: 0, O: 0 });
+  });
+
+  test('increments the cat score when X wins', () => {
+    expect(incrementScore({ X: 2, O: 1 }, 'X')).toEqual({ X: 3, O: 1 });
+  });
+
+  test('increments the dog score when O wins', () => {
+    expect(incrementScore({ X: 2, O: 1 }, 'O')).toEqual({ X: 2, O: 2 });
+  });
+
+  test('ignores invalid winners', () => {
+    expect(incrementScore({ X: 1, O: 1 }, null)).toEqual({ X: 1, O: 1 });
+    expect(incrementScore({ X: 1, O: 1 }, 'Z')).toEqual({ X: 1, O: 1 });
+  });
+});
+
 // ---------------------------------------------------------------------------
 // applyMove
 // ---------------------------------------------------------------------------
