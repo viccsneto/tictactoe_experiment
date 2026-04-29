@@ -21,8 +21,55 @@
   <div id="results"></div>
   <div id="summary">Running tests...</div>
 
+  <div id="test-fixture" style="display: none;">
+    <div class="status" id="status">Player 🐱's turn</div>
+    <div class="board" id="board">
+      <button class="cell" data-index="0"></button>
+      <button class="cell" data-index="1"></button>
+      <button class="cell" data-index="2"></button>
+      <button class="cell" data-index="3"></button>
+      <button class="cell" data-index="4"></button>
+      <button class="cell" data-index="5"></button>
+      <button class="cell" data-index="6"></button>
+      <button class="cell" data-index="7"></button>
+      <button class="cell" data-index="8"></button>
+    </div>
+    <div class="actions">
+      <button class="btn" id="restart">New Game</button>
+    </div>
+  </div>
+
   <script src="tests/test-runner.js"></script>
   <script src="game.js"></script>
   <script src="tests/game.test.js"></script>
+  <script src="script.js"></script>
+  <script>
+    describe('UI emoji rendering', () => {
+      test('initial status uses cat emoji', () => {
+        const status = document.getElementById('status');
+        expect(status.textContent).toBe("Player 🐱's turn");
+      });
+
+      test('first move renders cat and switches to dog', () => {
+        document.getElementById('restart').click();
+        const first = document.querySelector('.cell[data-index="0"]');
+        first.click();
+        const status = document.getElementById('status');
+        expect(first.textContent).toBe('🐱');
+        expect(status.textContent).toBe("Player 🐶's turn");
+      });
+
+      test('second move renders dog and switches to cat', () => {
+        document.getElementById('restart').click();
+        const first = document.querySelector('.cell[data-index="0"]');
+        const second = document.querySelector('.cell[data-index="1"]');
+        first.click();
+        second.click();
+        const status = document.getElementById('status');
+        expect(second.textContent).toBe('🐶');
+        expect(status.textContent).toBe("Player 🐱's turn");
+      });
+    });
+  </script>
 </body>
 </html>
