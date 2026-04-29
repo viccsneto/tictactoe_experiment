@@ -6,8 +6,16 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const scoreXElement = document.getElementById('scoreX');
+const scoreOElement = document.getElementById('scoreO');
 
 let state = createInitialState();
+
+// Score tracking (persists across rounds)
+let scores = {
+  'X': 0,
+  'O': 0
+};
 
 // Map player symbols to display symbols
 const DISPLAY_SYMBOLS = {
@@ -17,6 +25,11 @@ const DISPLAY_SYMBOLS = {
 
 function getDisplaySymbol(symbol) {
   return DISPLAY_SYMBOLS[symbol] || symbol;
+}
+
+function renderScores() {
+  scoreXElement.textContent = scores['X'];
+  scoreOElement.textContent = scores['O'];
 }
 
 function render() {
@@ -49,6 +62,9 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      // Increment score for the winner
+      scores[result.winner]++;
+      renderScores();
       result.combo.forEach(i => cells[i].classList.add('winning'));
       setStatus(`Player ${getDisplaySymbol(result.winner)} wins!`, 'win');
     } else {
@@ -74,4 +90,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
+renderScores();
 setStatus(`Player ${getDisplaySymbol(state.current)}'s turn`);
