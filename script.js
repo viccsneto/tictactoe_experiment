@@ -6,6 +6,8 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const scoreXEl = document.getElementById('score-x');
+const scoreOEl = document.getElementById('score-o');
 
 const PLAYER_EMOJI = {
   X: '🐱',
@@ -15,6 +17,11 @@ const PLAYER_EMOJI = {
 function getPlayerLabel(player) {
   return PLAYER_EMOJI[player] || '';
 }
+
+const scores = {
+  X: 0,
+  O: 0,
+};
 
 let state = createInitialState();
 
@@ -29,6 +36,11 @@ function render() {
 function setStatus(msg, cls = '') {
   status.textContent = msg;
   status.className   = 'status' + (cls ? ` ${cls}` : '');
+}
+
+function updateScoreboard() {
+  if (scoreXEl) scoreXEl.textContent = String(scores.X);
+  if (scoreOEl) scoreOEl.textContent = String(scores.O);
 }
 
 function handleClick(e) {
@@ -49,6 +61,8 @@ function handleClick(e) {
     state.gameOver = true;
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
+      scores[result.winner] += 1;
+      updateScoreboard();
       setStatus(`Player ${getPlayerLabel(result.winner)} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
@@ -74,3 +88,4 @@ restartBtn.addEventListener('click', restartGame);
 // Initial render
 render();
 setStatus(`Player ${getPlayerLabel(state.current)}'s turn`);
+updateScoreboard();
