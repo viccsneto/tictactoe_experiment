@@ -6,12 +6,35 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const scoreXElement = document.getElementById('scoreX');
+const scoreOElement = document.getElementById('scoreO');
 
 let state = createInitialState();
 
+// Score tracking (persists across rounds)
+let scores = {
+  'X': 0,
+  'O': 0
+};
+
+// Map player symbols to display symbols
+const DISPLAY_SYMBOLS = {
+  'X': '🐱',
+  'O': '🐶'
+};
+
+function getDisplaySymbol(symbol) {
+  return DISPLAY_SYMBOLS[symbol] || symbol;
+}
+
+function renderScores() {
+  scoreXElement.textContent = scores['X'];
+  scoreOElement.textContent = scores['O'];
+}
+
 function render() {
   cells.forEach((cell, i) => {
-    cell.textContent = state.board[i];
+    cell.textContent = getDisplaySymbol(state.board[i]);
     cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
@@ -39,8 +62,11 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      // Increment score for the winner
+      scores[result.winner]++;
+      renderScores();
       result.combo.forEach(i => cells[i].classList.add('winning'));
-      setStatus(`Player ${result.winner} wins!`, 'win');
+      setStatus(`Player ${getDisplaySymbol(result.winner)} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
     }
@@ -50,13 +76,13 @@ function handleClick(e) {
   }
 
   state.current = getNextPlayer(state.current);
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${getDisplaySymbol(state.current)}'s turn`);
 }
 
 function restartGame() {
   state = createInitialState();
   render();
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${getDisplaySymbol(state.current)}'s turn`);
 }
 
 cells.forEach(cell => cell.addEventListener('click', handleClick));
@@ -64,4 +90,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
-setStatus(`Player ${state.current}'s turn`);
+renderScores();
+setStatus(`Player ${getDisplaySymbol(state.current)}'s turn`);

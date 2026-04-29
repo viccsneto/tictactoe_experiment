@@ -5,21 +5,21 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## The Problem
-_One or two sentences on what we're solving._
+- the game currently shows X and O, but the task requires the UI to show cat and dog emojis instead.
+
 
 ## Steps
-- [ ] 
-- [ ] 
-- [ ] Update the test cases
+- Find where the board renders X and O.
+- Add a display mapping from X to 🐱 and O to 🐶.
 
 
 ## Success Looks Like
-- [ ] 
-- [ ] 
-- [ ] All tests pass
+- Board cells show 🐱 and 🐶.
+
 
 ## Notes
-- [ ] 
+- Do not globally replace every X and O.
+
 
 ---
 **⚠️ HUMAN ONLY**: This file is your strategic space. AI agents must not edit it.
