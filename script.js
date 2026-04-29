@@ -3,18 +3,31 @@
 // WINNING_COMBOS, checkWinner, getNextPlayer, applyMove, createInitialState
 // are provided by game.js, loaded before this script.
 
+const PLAYER_CLASS = {
+  '🐱': 'cat',
+  '🐶': 'dog',
+};
+
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const catScoreEl = document.getElementById('cat-score');
+const dogScoreEl = document.getElementById('dog-score');
 
 let state = createInitialState();
 
 function render() {
   cells.forEach((cell, i) => {
     cell.textContent = state.board[i];
-    cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
+    cell.className   = 'cell' + (state.board[i] ? ` ${PLAYER_CLASS[state.board[i]]}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
+  renderScores();
+}
+
+function renderScores() {
+  catScoreEl.textContent = state.scores.cat;
+  dogScoreEl.textContent = state.scores.dog;
 }
 
 function setStatus(msg, cls = '') {
@@ -41,6 +54,13 @@ function handleClick(e) {
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
       setStatus(`Player ${result.winner} wins!`, 'win');
+      // Update scores
+      if (result.winner === CAT) {
+        state.scores.cat++;
+      } else {
+        state.scores.dog++;
+      }
+      renderScores();
     } else {
       setStatus("It's a draw!", 'draw');
     }
@@ -54,7 +74,10 @@ function handleClick(e) {
 }
 
 function restartGame() {
+  const scores = state.scores; // Preserve scores
   state = createInitialState();
+  state.scores = scores; // Restore scores
+  cells.forEach(cell => cell.classList.remove('winning', 'placed')); // Clear visual indicators
   render();
   setStatus(`Player ${state.current}'s turn`);
 }
@@ -65,3 +88,4 @@ restartBtn.addEventListener('click', restartGame);
 // Initial render
 render();
 setStatus(`Player ${state.current}'s turn`);
+
