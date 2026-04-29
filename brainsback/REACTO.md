@@ -5,27 +5,65 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## R — The Problem
-_Repita_com_suas_palavras_qual_o_problema_sendo_resolvido_
+
+The agent had to make a swap between the current letters used in the game for the presented emojis (cat for X, dog for O)
 
 ## E — Examples
-_Exemplos_de_entrada_saída_ou_situacao_e_resposta_
 
-- **Input**: 
+- **Input**: X
 
-  **Output**:
+  **Output**: 😺
 
-- **Input**:
+- **Input**: O
 
-  **Output**:
+  **Output**: 🐶
 
 ## A — Approach
-_Um_paragrafo_descrevendo_a_estrategia_para_a_solucao_do_problema_
+
+The agent implemented a map where when the cell is going to be rendered, it swaps the respective character by the emoji in the mapping.
 
 ## C — Code
-_Liste_as_funcoes__onde_elas_foram_implementadas_e_de_onde_sao_chamadas_para_resolver_o_problema_
+
+In game.js:
+
+'''
+function displayMark(mark) {
+  return mark === 'X' ? '😺' : mark === 'O' ? '🐶' : '';
+}
+'''
+
+'''
+module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner, displayMark };
+'''
+
+In script.js:
+
+'''
+setStatus(`Player ${displayMark(state.current)}'s turn`);
+'''
 
 ## T — Tests
-_Como_voce_testou_que_o_problema_foi_resolvido__informe_testes_manuais_e_automaticos_
+
+The agent made a test where checks if using the specific character is shown the mapped version for that character.
+
+'''
+describe('displayMark', () => {
+  test('returns a cat face for X', () => {
+    expect(displayMark('X')).toBe('😺');
+  });
+
+  test('returns a dog face for O', () => {
+    expect(displayMark('O')).toBe('🐶');
+  });
+
+  test('returns an empty string for unknown marks', () => {
+    expect(displayMark('')).toBe('');
+    expect(displayMark('Z')).toBe('');
+  });
+});
+
+'''
 
 ## O — Optimization
-_Analise_bigO__pode_nao_se_aplicar_em_alguns_casos_
+
+O(1)

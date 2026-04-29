@@ -70,6 +70,40 @@ describe('getNextPlayer', () => {
   });
 });
 
+describe('displayMark', () => {
+  test('returns a cat face for X', () => {
+    expect(displayMark('X')).toBe('😺');
+  });
+
+  test('returns a dog face for O', () => {
+    expect(displayMark('O')).toBe('🐶');
+  });
+
+  test('returns an empty string for unknown marks', () => {
+    expect(displayMark('')).toBe('');
+    expect(displayMark('Z')).toBe('');
+  });
+});
+
+describe('score helpers', () => {
+  test('creates a zeroed score state', () => {
+    expect(createScoreState()).toEqual({ X: 0, O: 0 });
+  });
+
+  test('increments the cat score when X wins', () => {
+    expect(incrementScore({ X: 2, O: 1 }, 'X')).toEqual({ X: 3, O: 1 });
+  });
+
+  test('increments the dog score when O wins', () => {
+    expect(incrementScore({ X: 2, O: 1 }, 'O')).toEqual({ X: 2, O: 2 });
+  });
+
+  test('ignores invalid winners', () => {
+    expect(incrementScore({ X: 1, O: 1 }, null)).toEqual({ X: 1, O: 1 });
+    expect(incrementScore({ X: 1, O: 1 }, 'Z')).toEqual({ X: 1, O: 1 });
+  });
+});
+
 // ---------------------------------------------------------------------------
 // applyMove
 // ---------------------------------------------------------------------------

@@ -6,15 +6,27 @@
 const cells    = document.querySelectorAll('.cell');
 const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
+const catScore  = document.getElementById('cat-score');
+const dogScore  = document.getElementById('dog-score');
 
-let state = createInitialState();
+let state = {
+  ...createInitialState(),
+  scores: createScoreState(),
+};
+
+function displayMark(mark) {
+  return mark === 'X' ? '😺' : mark === 'O' ? '🐶' : '';
+}
 
 function render() {
   cells.forEach((cell, i) => {
-    cell.textContent = state.board[i];
+    cell.textContent = displayMark(state.board[i]);
     cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
+
+  if (catScore) catScore.textContent = state.scores.X;
+  if (dogScore) dogScore.textContent = state.scores.O;
 }
 
 function setStatus(msg, cls = '') {
@@ -39,24 +51,29 @@ function handleClick(e) {
   if (result) {
     state.gameOver = true;
     if (result.winner) {
+      state.scores = incrementScore(state.scores, result.winner);
       result.combo.forEach(i => cells[i].classList.add('winning'));
-      setStatus(`Player ${result.winner} wins!`, 'win');
+      setStatus(`Player ${displayMark(result.winner)} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
     }
+    render();
     // Disable all cells
     cells.forEach(c => (c.disabled = true));
     return;
   }
 
   state.current = getNextPlayer(state.current);
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${displayMark(state.current)}'s turn`);
 }
 
 function restartGame() {
-  state = createInitialState();
+  state = {
+    ...createInitialState(),
+    scores: state.scores,
+  };
   render();
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${displayMark(state.current)}'s turn`);
 }
 
 cells.forEach(cell => cell.addEventListener('click', handleClick));
@@ -64,4 +81,4 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
-setStatus(`Player ${state.current}'s turn`);
+setStatus(`Player ${displayMark(state.current)}'s turn`);
