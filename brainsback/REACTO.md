@@ -5,27 +5,32 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## R — The Problem
-_Repita_com_suas_palavras_qual_o_problema_sendo_resolvido_
+The problem was replace the X for a 😺 (Cat face) and the O for a 🐶 (Dog face) in the Tic Tac Toe game, while retaining all of its original features and passing all the tests
 
 ## E — Examples
-_Exemplos_de_entrada_saída_ou_situacao_e_resposta_
 
-- **Input**: 
+- **Input**: Is the Player 😺's turn and it click on a box of the game.
 
-  **Output**:
+  **Output**: The emoji 😺 appears on the box.
 
-- **Input**:
+- **Input**: Is the Player 🐶's turn and it click on a box of the game.
 
-  **Output**:
+  **Output**: The emoji 🐶 appears on the box.
 
 ## A — Approach
-_Um_paragrafo_descrevendo_a_estrategia_para_a_solucao_do_problema_
+
+Created a function that maps the original symbols (X and O) and change them to the new ones (😺/🐶), rendering them on the UI, not changing the original logic.
 
 ## C — Code
-_Liste_as_funcoes__onde_elas_foram_implementadas_e_de_onde_sao_chamadas_para_resolver_o_problema_
+Created the getDisplaySymbol() function, that maps like this: 'X' = 😺, 'O' = 🐶. 
+
+Its then called by: Called by: render(), handleClick() and restartGame().
 
 ## T — Tests
-_Como_voce_testou_que_o_problema_foi_resolvido__informe_testes_manuais_e_automaticos_
+Manual: Opened index.html in browser, clicked cells, verified if 😺 appears for X and 🐶 for O.
+
+Automated: Ran full test suite (tests.html), all 31 tests passed.
 
 ## O — Optimization
-_Analise_bigO__pode_nao_se_aplicar_em_alguns_casos_
+
+Does not apply
