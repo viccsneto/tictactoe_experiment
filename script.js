@@ -9,9 +9,19 @@ const restartBtn     = document.getElementById('restart');
 
 let state = createInitialState();
 
+// Map player symbols to display symbols
+const DISPLAY_SYMBOLS = {
+  'X': '🐱',
+  'O': '🐶'
+};
+
+function getDisplaySymbol(symbol) {
+  return DISPLAY_SYMBOLS[symbol] || symbol;
+}
+
 function render() {
   cells.forEach((cell, i) => {
-    cell.textContent = state.board[i];
+    cell.textContent = getDisplaySymbol(state.board[i]);
     cell.className   = 'cell' + (state.board[i] ? ` ${state.board[i].toLowerCase()}` : '');
     cell.disabled    = state.board[i] !== '' || state.gameOver;
   });
@@ -40,7 +50,7 @@ function handleClick(e) {
     state.gameOver = true;
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
-      setStatus(`Player ${result.winner} wins!`, 'win');
+      setStatus(`Player ${getDisplaySymbol(result.winner)} wins!`, 'win');
     } else {
       setStatus("It's a draw!", 'draw');
     }
@@ -50,13 +60,13 @@ function handleClick(e) {
   }
 
   state.current = getNextPlayer(state.current);
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${getDisplaySymbol(state.current)}'s turn`);
 }
 
 function restartGame() {
   state = createInitialState();
   render();
-  setStatus(`Player ${state.current}'s turn`);
+  setStatus(`Player ${getDisplaySymbol(state.current)}'s turn`);
 }
 
 cells.forEach(cell => cell.addEventListener('click', handleClick));
@@ -64,4 +74,4 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
-setStatus(`Player ${state.current}'s turn`);
+setStatus(`Player ${getDisplaySymbol(state.current)}'s turn`);
