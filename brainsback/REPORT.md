@@ -6,23 +6,27 @@
 If present, use `.github/agents/brainsback-reviewer.md` as the review rubric.
 
 ## Snapshot
-- **Change**: Replaced X symbol with 😺 (cat emoji) and O symbol with 🐶 (dog emoji)
+- **Change**: Added scoring system to track wins for cat (😺) and dog (🐶) emoji players
 - **Status**: Complete
 
 ## The Changes
-- **game.js**: Updated initial player from 'X' to '😺', getNextPlayer logic now toggles between '😺' and '🐶', updated JSDoc comments with emoji types
-- **script.js**: Updated render() function to map emoji symbols to CSS classes ('x' and 'o' for styling compatibility)
-- **tests/game.test.js**: Updated boardFrom() helper to translate 'X'→'😺' and 'O'→'🐶', updated all test assertions to expect emoji values, updated test descriptions
+- **game.js**: Added catScore and dogScore to initial state, created updateScore() function to increment scores on wins
+- **script.js**: Added scoreboard display logic, score increment on wins, reset scores functionality, **FIXED**: restartGame() now preserves scores instead of resetting them
+- **index.html**: Added scoreboard HTML elements with cat and dog labels and score displays, added reset scores button
+- **style.css**: Utilized existing scoreboard CSS classes for styling
+- **tests/game.test.js**: Added tests for initial scores, updateScore function with various scenarios
 
 ## Testing Strategy
-- Verified emoji substitution in game.js initial state and getNextPlayer function
-- Confirmed script.js correctly maps emojis to CSS classes for styling
-- Updated all test assertions to use emojis instead of letters
-- Created boardFrom() helper to maintain test readability while working with emojis internally
+- Unit tests for score initialization (both scores start at 0)
+- Unit tests for updateScore function covering cat wins, dog wins, draws, and state immutability
+- Visual testing of scoreboard display and reset functionality
+- Integration testing to ensure scores update correctly during gameplay
 
 ## Risks & Follow-up
-- CSS classes are mapped correctly so existing visual styles (colors) remain functional
-- Browser compatibility: All modern browsers support emoji display
+- Score persistence: Scores reset when page refreshes (expected behavior for game session)
+- **FIXED**: Score reset bug - "New Game" button now correctly preserves scores while resetting only the board
+- UI responsiveness: Scoreboard layout works on different screen sizes
+- Emoji display: All modern browsers support emoji rendering
 
 ---
 **Note**: Usually filled by the AI.

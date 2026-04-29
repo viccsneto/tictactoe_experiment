@@ -14,6 +14,8 @@ function createInitialState() {
     board:   Array(9).fill(''),
     current: '😺',
     gameOver: false,
+    catScore: 0,
+    dogScore: 0,
   };
 }
 
@@ -60,7 +62,23 @@ function checkWinner(board) {
   return null;
 }
 
+/**
+ * Updates the score based on the winner.
+ * @param {object} state - Current game state
+ * @param {string|null} winner - Winner ('😺', '🐶', or null for draw)
+ * @returns {object} Updated state with new scores
+ */
+function updateScore(state, winner) {
+  const newState = { ...state };
+  if (winner === '😺') {
+    newState.catScore = state.catScore + 1;
+  } else if (winner === '🐶') {
+    newState.dogScore = state.dogScore + 1;
+  }
+  return newState;
+}
+
 // Allow require() in Node.js (Jest) while remaining a plain script in the browser.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner };
+  module.exports = { WINNING_COMBOS, createInitialState, getNextPlayer, applyMove, checkWinner, updateScore };
 }

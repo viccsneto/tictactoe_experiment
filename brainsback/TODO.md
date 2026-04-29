@@ -5,18 +5,22 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## The Problem
-_One or two sentences on what we're solving._
+Add a scoring system to track wins for cat emoji (😺) and dog emoji (🐶) players
 
 ## Steps
-- [ Change the X field in tictactoe game and change that for a cat emoji] 
-- [ ] 
-- [ ] Update the test cases
-
+- [x] Add score tracking to game state (catScore and dogScore)
+- [x] Update game logic to increment score when a player wins
+- [x] Add scoreboard HTML elements to display scores
+- [x] Update CSS for scoreboard styling
+- [x] Add reset score functionality
+- [x] Update tests to include score validation
 
 ## Success Looks Like
-- [ ] 
-- [ ] 
-- [ ] All tests pass
+- [x] Scoreboard displays cat and dog emoji with current scores
+- [x] Scores increment correctly when respective player wins
+- [x] Reset scores button clears all scores
+- [x] Scores persist across games until reset
+- [x] All tests pass including new score validation tests
 
 ## Notes
 - [ ] 

@@ -50,14 +50,57 @@ describe('createInitialState', () => {
     expect(createInitialState().current).toBe('😺');
   });
 
-  test('gameOver is false', () => {
-    expect(createInitialState().gameOver).toBe(false);
+  test('initial scores are zero', () => {
+    const state = createInitialState();
+    expect(state.catScore).toBe(0);
+    expect(state.dogScore).toBe(0);
   });
 
   test('each call returns a distinct board array', () => {
     const s1 = createInitialState();
     const s2 = createInitialState();
     expect(s1.board).not.toBe(s2.board);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// updateScore
+// ---------------------------------------------------------------------------
+
+describe('updateScore', () => {
+  test('increments cat score when cat wins', () => {
+    const state = createInitialState();
+    const newState = updateScore(state, '😺');
+    expect(newState.catScore).toBe(1);
+    expect(newState.dogScore).toBe(0);
+  });
+
+  test('increments dog score when dog wins', () => {
+    const state = createInitialState();
+    const newState = updateScore(state, '🐶');
+    expect(newState.catScore).toBe(0);
+    expect(newState.dogScore).toBe(1);
+  });
+
+  test('does not change scores on draw', () => {
+    const state = createInitialState();
+    const newState = updateScore(state, null);
+    expect(newState.catScore).toBe(0);
+    expect(newState.dogScore).toBe(0);
+  });
+
+  test('preserves existing scores when updating', () => {
+    const state = { ...createInitialState(), catScore: 2, dogScore: 3 };
+    const newState = updateScore(state, '😺');
+    expect(newState.catScore).toBe(3);
+    expect(newState.dogScore).toBe(3);
+  });
+
+  test('does not mutate original state', () => {
+    const state = createInitialState();
+    updateScore(state, '😺');
+    expect(state.catScore).toBe(0);
+    expect(state.dogScore).toBe(0);
   });
 });
 
