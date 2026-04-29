@@ -62,6 +62,12 @@ describe('createInitialState', () => {
     const s2 = createInitialState();
     expect(s1.board).not.toBe(s2.board);
   });
+
+  test('scores start at 0 for both players', () => {
+    const { scores } = createInitialState();
+    expect(scores.cat).toBe(0);
+    expect(scores.dog).toBe(0);
+  });
 });
 
 // ---------------------------------------------------------------------------

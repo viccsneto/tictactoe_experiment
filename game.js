@@ -17,6 +17,7 @@ function createInitialState() {
     board:   Array(9).fill(''),
     current: CAT,
     gameOver: false,
+    scores:  { cat: 0, dog: 0 },
   };
 }
 
