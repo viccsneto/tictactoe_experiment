@@ -54,6 +54,20 @@ describe('createInitialState', () => {
     const s2 = createInitialState();
     expect(s1.board).not.toBe(s2.board);
   });
+
+  test('catWins is initialized to 0', () => {
+    expect(createInitialState().catWins).toBe(0);
+  });
+
+  test('dogWins is initialized to 0', () => {
+    expect(createInitialState().dogWins).toBe(0);
+  });
+
+  test('state includes both score properties', () => {
+    const state = createInitialState();
+    expect('catWins' in state).toBe(true);
+    expect('dogWins' in state).toBe(true);
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -303,5 +317,46 @@ describe('checkWinner — result shape', () => {
       expect(i).toBeGreaterThanOrEqual(0);
       expect(i).toBeLessThanOrEqual(8);
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Points System
+// ---------------------------------------------------------------------------
+
+describe('Points System — State Structure', () => {
+  test('initial state includes catWins property', () => {
+    const state = createInitialState();
+    expect('catWins' in state).toBe(true);
+  });
+
+  test('initial state includes dogWins property', () => {
+    const state = createInitialState();
+    expect('dogWins' in state).toBe(true);
+  });
+
+  test('catWins starts at 0', () => {
+    expect(createInitialState().catWins).toBe(0);
+  });
+
+  test('dogWins starts at 0', () => {
+    expect(createInitialState().dogWins).toBe(0);
+  });
+
+  test('each new state has independent score objects', () => {
+    const s1 = createInitialState();
+    const s2 = createInitialState();
+    s1.catWins = 5;
+    expect(s2.catWins).toBe(0);
+    expect(s2.dogWins).toBe(0);
+  });
+
+  test('state includes all required properties', () => {
+    const state = createInitialState();
+    expect('board' in state).toBe(true);
+    expect('current' in state).toBe(true);
+    expect('gameOver' in state).toBe(true);
+    expect('catWins' in state).toBe(true);
+    expect('dogWins' in state).toBe(true);
   });
 });

@@ -66,6 +66,14 @@ h1 {
   color: #38bdf8;
 }
 
+.score-label.cat-color {
+  color: #fbbf24;
+}
+
+.score-label.dog-color {
+  color: #a78bfa;
+}
+
 .score-value {
   font-size: 1.8rem;
   font-weight: 700;

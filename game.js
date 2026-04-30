@@ -14,6 +14,8 @@ function createInitialState() {
     board:   Array(9).fill(''),
     current: '😸',
     gameOver: false,
+    catWins: 0,
+    dogWins: 0,
   };
 }
 
