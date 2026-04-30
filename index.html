@@ -28,6 +28,21 @@
     <button class="test-btn" onclick="window.open('tests.html', '_blank', 'width=800,height=600')">TEST</button>
     <h1>Tic-Tac-Toe</h1>
 
+    <div class="scoreboard" id="scoreboard">
+      <div class="score">
+        <div class="score-label x-color">🐱 Wins</div>
+        <div class="score-value" id="cat-score">0</div>
+      </div>
+      <div class="score">
+        <div class="score-label">Draws</div>
+        <div class="score-value" id="draw-score">0</div>
+      </div>
+      <div class="score">
+        <div class="score-label o-color">🐶 Wins</div>
+        <div class="score-value" id="dog-score">0</div>
+      </div>
+    </div>
+
     <div class="status" id="status">Player 🐱's turn</div>
 
     <div class="board" id="board">
@@ -48,6 +63,7 @@
   </div>
 
   <script src="game.js"></script>
+  <script src="scoreboard.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

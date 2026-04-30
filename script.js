@@ -8,6 +8,7 @@ const status   = document.getElementById('status');
 const restartBtn     = document.getElementById('restart');
 
 let state = createInitialState();
+let scoreboard = loadScoreboard();
 
 function render() {
   cells.forEach((cell, i) => {
@@ -43,8 +44,12 @@ function handleClick(e) {
     state.gameOver = true;
     if (result.winner) {
       result.combo.forEach(i => cells[i].classList.add('winning'));
+      recordWin(scoreboard, result.winner);
+      renderScoreboard(scoreboard);
       setStatus(`Player ${result.winner} wins!`, 'win');
     } else {
+      recordDraw(scoreboard);
+      renderScoreboard(scoreboard);
       setStatus("It's a draw!", 'draw');
     }
     // Disable all cells
@@ -67,4 +72,5 @@ restartBtn.addEventListener('click', restartGame);
 
 // Initial render
 render();
+renderScoreboard(scoreboard);
 setStatus(`Player ${state.current}'s turn`);
