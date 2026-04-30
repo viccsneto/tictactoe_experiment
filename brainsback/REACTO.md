@@ -5,27 +5,35 @@
 **Hard rule**: AI agents must not edit this file and must not draft paste-ready content for it.
 
 ## R — The Problem
-_Repita_com_suas_palavras_qual_o_problema_sendo_resolvido_
+O problema que está sendo resolvido é a substituição dos caracteres no jogo tic tac toe. Quero substituir o caractere X por 🐱 e o caractere O por 🐶. 
 
 ## E — Examples
-_Exemplos_de_entrada_saída_ou_situacao_e_resposta_
 
 - **Input**: 
-
+  "O primeiro usuário deverá jogar"
   **Output**:
+  Player 🐱's turn
 
 - **Input**:
-
+  "O segundo usuário deverá jogar"
   **Output**:
+  Player 🐶's turn
 
 ## A — Approach
-_Um_paragrafo_descrevendo_a_estrategia_para_a_solucao_do_problema_
+
+No arquivo game.js o agente identificou as partes que renderizava os caracteres X e O e trocou. Em seguida, ele vasculhou o index.html buscando referencia aos mesmos caracteres e também alterou. Em seguida, ele modificou o script.js para referenciar os icones ao invés dos caracteres. Por fim, os testes foram executados. 
 
 ## C — Code
-_Liste_as_funcoes__onde_elas_foram_implementadas_e_de_onde_sao_chamadas_para_resolver_o_problema_
+No arquivo game.js a função modificada foi a `createInitialState()`; 
+
+No index.js o trecho modificado foi o da div que apresenta o status do jogador corrente: <div class="status" id="status">Player 🐱's turn</div>.
+
+No script.js a função `render()` foi alterada, removendo a chamada ao lower case, por exemplo, que passa a não fazer mais sentido. A função também foi modificada para mapear emojis para as classes CSS `.x` e `.o`
+
+
+Nos testes foi atualizada função helper `boardFrom()` para converter 'X' → '🐱' e 'O' → '🐶'
 
 ## T — Tests
-_Como_voce_testou_que_o_problema_foi_resolvido__informe_testes_manuais_e_automaticos_
+De maneira bem direta, todas as referências a 'X' → '🐱' e 'O' → '🐶'. Após isso os testes foram reexecutados e tudo passou. 
 
 ## O — Optimization
-_Analise_bigO__pode_nao_se_aplicar_em_alguns_casos_
